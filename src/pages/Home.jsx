@@ -4,10 +4,10 @@ import Button from "react-bootstrap/Button";
 function Home() {
   return (
     <div className="home">
-      <div class="container">
-        <div class="my-5">
-          <div class="col-lg-5">
-            <h1 class="font-weight-heavy">Vaishak's Wordle Wizard</h1>
+      <div className="container">
+        <div className="my-5">
+          <div className="col-lg-5">
+            <h1 className="font-weight-heavy">Vaishak's Wordle Wizard</h1>
             <p>
               How it works: Lorem Ipsum is simply dummy text of the printing and
               typesetting industry. Lorem Ipsum has been the industry's standard
