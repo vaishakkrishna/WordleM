@@ -21,7 +21,11 @@ function Grid(props) {
       newWordRows[currectActiveWordRow][currentActiveLetter - 1] = "-";
       setCurrentActiveLetter(currentActiveLetter - 1);
       setWordRows(newWordRows);
-    } else if (isAlphabetic(event.key) && currentActiveLetter < 5) {
+    } else if (
+      isAlphabetic(event.key) &&
+      currentActiveLetter < 5 &&
+      event.key.length === 1
+    ) {
       const newWordRows = JSON.parse(JSON.stringify(wordRows));
       newWordRows[currectActiveWordRow][currentActiveLetter] = event.key;
       setCurrentActiveLetter(currentActiveLetter + 1);
