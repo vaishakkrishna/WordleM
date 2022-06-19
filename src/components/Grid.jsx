@@ -27,7 +27,8 @@ function Grid(props) {
       event.key.length === 1
     ) {
       const newWordRows = JSON.parse(JSON.stringify(wordRows));
-      newWordRows[currectActiveWordRow][currentActiveLetter] = event.key;
+      newWordRows[currectActiveWordRow][currentActiveLetter] =
+        event.key.toUpperCase();
       setCurrentActiveLetter(currentActiveLetter + 1);
       setWordRows(newWordRows);
     } else if (

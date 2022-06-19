@@ -7,7 +7,7 @@ function WordRow(props) {
   for (var i = 0; i < 5; i++) {
     row.push(<WordBox key={i} value={props.wordRowValue[i]} />);
   }
-  return <div className="d-flex justify-content-start ">{row}</div>;
+  return <div className="d-flex justify-content-center my-1">{row}</div>;
 }
 
 export default WordRow;
