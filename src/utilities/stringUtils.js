@@ -17,5 +17,9 @@ export function isValidWord(word){
 }
 
 export function getColorsFromGuess(guess){
-  return ["g", "g", "y", "y", "r"]
+  const api_url = "http://127.0.0.1:8000/wordleWizard/color-guess/?guess=" + guess.join("")
+  return new Promise((resolve, reject) => {
+    fetch(api_url).then(res => res.text()).then(result => resolve(result))
+  })
+  
 }

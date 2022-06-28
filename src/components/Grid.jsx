@@ -17,9 +17,11 @@ function Grid(props) {
   const [colorRows, setColorRows] = useState(
     generateEmptyBoard(parseInt(props.width), parseInt(props.height))
   );
+  const [solved, setSolved] = useState(false);
 
   // Handle Key presses
   const keyDownHandler = (event) => {
+    if (!solved) {
     if (event.key === "Backspace" && currentActiveLetter > 0) {
       const newWordRows = JSON.parse(JSON.stringify(wordRows));
       newWordRows[currectActiveWordRow][currentActiveLetter - 1] = "-";
@@ -45,12 +47,25 @@ function Grid(props) {
       //fill in the previous color row with colors
       const newColorRows = JSON.parse(JSON.stringify(colorRows));
 
-      newColorRows[currectActiveWordRow] = getColorsFromGuess(wordRows[currectActiveWordRow]);
-      setColorRows(newColorRows);
+      getColorsFromGuess(wordRows[currectActiveWordRow]).then(
+        (colors) => {
+          if (colors === "ggggg"){
+            alert("You win!");
+            setSolved(true);
+          }
+          newColorRows[currectActiveWordRow] = colors
+        }
+      ).then(
+        () => {
+          setColorRows(newColorRows)
+        }
+      );
+      
       setCurrentActiveWordRow(currectActiveWordRow + 1);
       setCurrentActiveLetter(0);
       
     }
+  }
   };
   useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
