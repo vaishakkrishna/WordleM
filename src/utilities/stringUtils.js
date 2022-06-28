@@ -23,6 +23,14 @@ export function getColorsFromGuess(guess){
   })
 }
 
-export function getNextGuessFromGrid(grid){
-  
+export function getNextGuessFromGrid(grid, currentActiveWordRow){
+  const prev_guesses = []
+  for(let i = 0; i < currentActiveWordRow; i++){
+    prev_guesses.push(grid[i].join(""))
+  }
+  const api_url = "http://127.0.0.1:8000/wordleWizard/next-guess/?guesses=" + "[" + prev_guesses.join(", ") + "]" 
+  return new Promise((resolve, reject) => {
+    fetch(api_url).then(res => res.text()).then(result => resolve(result))
+  })
+
 }
