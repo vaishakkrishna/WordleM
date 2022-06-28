@@ -5,12 +5,16 @@ import {
   isAlphabetic,
   generateEmptyBoard,
   isValidWord,
+  getColorsFromGuess
 } from "../utilities/stringUtils";
 
 function Grid(props) {
   const [currectActiveWordRow, setCurrentActiveWordRow] = useState(0);
   const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
   const [wordRows, setWordRows] = useState(
+    generateEmptyBoard(parseInt(props.width), parseInt(props.height))
+  );
+  const [colorRows, setColorRows] = useState(
     generateEmptyBoard(parseInt(props.width), parseInt(props.height))
   );
 
@@ -21,6 +25,7 @@ function Grid(props) {
       newWordRows[currectActiveWordRow][currentActiveLetter - 1] = "-";
       setCurrentActiveLetter(currentActiveLetter - 1);
       setWordRows(newWordRows);
+
     } else if (
       isAlphabetic(event.key) &&
       currentActiveLetter < 5 &&
@@ -32,13 +37,19 @@ function Grid(props) {
       setCurrentActiveLetter(currentActiveLetter + 1);
       setWordRows(newWordRows);
     } else if (
-      event.key == "Enter" &&
+      event.key === "Enter" &&
       currentActiveLetter === 5 &&
       currectActiveWordRow < 6 &&
-      isValidWord(wordRows[i])
+      isValidWord(wordRows[currectActiveWordRow])
     ) {
+      //fill in the previous color row with colors
+      const newColorRows = JSON.parse(JSON.stringify(colorRows));
+
+      newColorRows[currectActiveWordRow] = getColorsFromGuess(wordRows[currectActiveWordRow]);
+      setColorRows(newColorRows);
       setCurrentActiveWordRow(currectActiveWordRow + 1);
       setCurrentActiveLetter(0);
+      
     }
   };
   useEffect(() => {
@@ -52,7 +63,7 @@ function Grid(props) {
   var rows = [];
 
   for (var i = 0; i < 6; i++) {
-    rows.push(<WordRow key={i} wordRowValue={wordRows[i]} />);
+    rows.push(<WordRow key={i} wordRowValue={wordRows[i]} colorRowValue={colorRows[i]}/>);
   }
 
   return <div>{rows}</div>;

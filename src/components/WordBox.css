@@ -3,3 +3,12 @@
     font-family: "Monaco", "Courier New", monospace;
     font-size: 30;
   }
+.bg-color-green {
+    background-color: #538d4e;
+  }
+.bg-color-yellow{
+    background-color: #b59f3b;
+  }
+.bg-color-grey{
+    background-color: #3a3a3c;
+  }

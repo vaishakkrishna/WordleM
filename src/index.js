@@ -9,6 +9,7 @@ import ScoreReport from "./pages/ScoreReport";
 import Solver from "./pages/Solver"
 import NoPage from "./pages/NoPage";
 
+
 export default function App() {
   return (
     <div>
