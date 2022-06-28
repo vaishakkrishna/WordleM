@@ -21,5 +21,8 @@ export function getColorsFromGuess(guess){
   return new Promise((resolve, reject) => {
     fetch(api_url).then(res => res.text()).then(result => resolve(result))
   })
+}
+
+export function getNextGuessFromGrid(grid){
   
 }

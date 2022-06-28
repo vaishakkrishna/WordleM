@@ -7,8 +7,13 @@ import {
   isValidWord,
   getColorsFromGuess,
 } from "../utilities/stringUtils";
+import Button from "react-bootstrap/Button";
 
-function Grid(props) {
+function HelperGrid(props) {
+  function handleNextGuessClicked(e) {
+     
+
+  }
   const [currectActiveWordRow, setCurrentActiveWordRow] = useState(0);
   const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
   const [wordRows, setWordRows] = useState(
@@ -18,7 +23,7 @@ function Grid(props) {
     generateEmptyBoard(parseInt(props.width), parseInt(props.height))
   );
   const [solved, setSolved] = useState(false);
-  
+
   // Handle Key presses
   const keyDownHandler = (event) => {
     if (!solved) {
@@ -45,9 +50,11 @@ function Grid(props) {
       ) {
         //fill in the previous color row with colors
         const newColorRows = JSON.parse(JSON.stringify(colorRows));
+        var newSolved = false;
         getColorsFromGuess(wordRows[currectActiveWordRow])
           .then((colors) => {
             if (colors === "ggggg") {
+              newSolved = true;
               setSolved(true);
             }
             newColorRows[currectActiveWordRow] = colors;
@@ -81,6 +88,16 @@ function Grid(props) {
     );
   }
 
-  return <div>{rows}</div>;
+  return (
+    <div>
+      {rows}
+      <Button
+        className="my-5 justify-content-center btn-success"
+        onClick={handleNextGuessClicked}
+      >
+        Click on me to reveal the best next guess!
+      </Button>
+    </div>
+  );
 }
-export default Grid;
+export default HelperGrid;
