@@ -22,13 +22,7 @@ function HelperGrid(props) {
   const [solved, setSolved] = useState(false);
 
   // Handle Button press
-  function handleNextGuessClicked(e) {
-    // get the next guess from api
-    getNextGuessFromGrid(wordRows, currectActiveWordRow).then((nextGuess) => {
-      // fill in the next guess
-      fillInWord(nextGuess);
-    });
-  }
+  
   // Update the row if it is completed (updates the colors, moves to next row)
   const updateCompletedRow = () => {
     //fill in the previous color row with colors

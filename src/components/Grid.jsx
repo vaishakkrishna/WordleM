@@ -1,14 +1,19 @@
 import WordRow from "./WordRow";
 import "./Grid.css";
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import {
   isAlphabetic,
   generateEmptyBoard,
   isValidWord,
   getColorsFromGuess,
+  getNextGuessFromGrid,
 } from "../utilities/stringUtils";
 
 function Grid(props) {
+  /**
+   * STATE VARIABLES
+   **/
   const [currectActiveWordRow, setCurrentActiveWordRow] = useState(0);
   const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
   const [wordRows, setWordRows] = useState(
@@ -18,21 +23,19 @@ function Grid(props) {
     generateEmptyBoard(parseInt(props.width), parseInt(props.height))
   );
   const [solved, setSolved] = useState(false);
-  // function to fill in the current row of the grid with a word
-  const fillInWord = (wordAsString) => {
-    const newWordRows = JSON.parse(JSON.stringify(wordRows));
-    newWordRows[currectActiveWordRow] = wordAsString.split();
 
-    getColorsFromGuess(wordAsString)
-      .then((colors) => {
-        const newColorRows = JSON.parse(JSON.stringify(colorRows));
-        newColorRows[currectActiveWordRow] = colors;
-        setColorRows(newColorRows);
-        setWordRows(newWordRows);
-        setCurrentActiveLetter(0);
-        setCurrentActiveWordRow(currectActiveWordRow + 1);
-      })
-      .catch((err) => {});
+  /**
+   * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
+   **/
+  const fillInWord = (wordAsString) => {
+    if (currectActiveWordRow >= wordRows.length) {
+      console.log("Attempting to fill in word after end of grid!");
+      return;
+    }
+    const newWordRows = JSON.parse(JSON.stringify(wordRows));
+    newWordRows[currectActiveWordRow] = wordAsString.split("");
+    setWordRows(newWordRows);
+    setCurrentActiveWordRow(currectActiveWordRow + 1);
   };
 
   // function to fill in current letter
@@ -44,27 +47,21 @@ function Grid(props) {
     setWordRows(newWordRows);
   };
 
+  // Fills in colors of the previous row when it was completed
   const updateCompletedRow = () => {
-    if (
-      currentActiveLetter === 5 &&
-      currectActiveWordRow < 6 &&
-      isValidWord(wordRows[currectActiveWordRow])
-    ) {
-      const newColorRows = JSON.parse(JSON.stringify(colorRows));
-      getColorsFromGuess(wordRows[currectActiveWordRow])
-        .then((colors) => {
-          if (colors === "ggggg") {
-            setSolved(true);
-          }
-          newColorRows[currectActiveWordRow] = colors;
-        })
-        .then(() => {
-          setColorRows(newColorRows);
-        })
-        .catch((err) => {});
-      setCurrentActiveWordRow(currectActiveWordRow + 1);
-      setCurrentActiveLetter(0);
-    }
+    const newColorRows = JSON.parse(JSON.stringify(colorRows));
+    getColorsFromGuess(wordRows[currectActiveWordRow - 1])
+      .then((colors) => {
+        if (colors === "ggggg") {
+          setSolved(true);
+        }
+        newColorRows[currectActiveWordRow - 1] = colors;
+      })
+      .then(() => {
+        setColorRows(newColorRows);
+      })
+      .catch((err) => {});
+
     //fill in the previous color row with colors
   };
 
@@ -76,6 +73,16 @@ function Grid(props) {
       setWordRows(newWordRows);
     }
   };
+
+  //Handle button presses
+  function handleNextGuessClicked(e) {
+    // get the next guess from api
+    getNextGuessFromGrid(wordRows, currectActiveWordRow).then((nextGuess) => {
+      // fill in the next guess
+      fillInWord(nextGuess);
+    });
+  }
+
   // Handle Key presses
   const keyDownHandler = (event) => {
     if (!solved) {
@@ -91,11 +98,23 @@ function Grid(props) {
         const letter = event.key;
         fillInLetter(letter);
         // check if Row is completed
-      } else if (event.key === "Enter") {
-        updateCompletedRow();
+      } else if (
+        event.key === "Enter" &&
+        currentActiveLetter === 5 &&
+        currectActiveWordRow < 6 &&
+        isValidWord(wordRows[currectActiveWordRow])
+      ) {
+        setCurrentActiveLetter(0);
+        setCurrentActiveWordRow(currectActiveWordRow + 1);
       }
     }
   };
+
+  useEffect(() => {
+    if (currectActiveWordRow > 0) {
+      updateCompletedRow();
+    }
+  }, [currectActiveWordRow]);
 
   useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
@@ -117,6 +136,18 @@ function Grid(props) {
     );
   }
 
-  return <div>{rows}</div>;
+  return (
+    <div>
+      {rows}
+      {props.type === "helper" && (
+        <Button
+          className="my-5 justify-content-center btn-success"
+          onClick={handleNextGuessClicked}
+        >
+          Click on me to reveal the best next guess!
+        </Button>
+      )}
+    </div>
+  );
 }
 export default Grid;
