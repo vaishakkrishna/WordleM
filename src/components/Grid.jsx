@@ -8,7 +8,9 @@ import {
   isValidWord,
   getColorsFromGuess,
   getNextGuessFromGrid,
+  SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
+import { allWordsList } from "../utilities/wordLists";
 
 function Grid(props) {
   /**
@@ -23,6 +25,7 @@ function Grid(props) {
     generateEmptyBoard(parseInt(props.width), parseInt(props.height))
   );
   const [solved, setSolved] = useState(false);
+  const [solutionSet, setSolutionSet] = useState([...allWordsList]);
 
   /**
    * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
@@ -55,14 +58,12 @@ function Grid(props) {
         if (colors === "ggggg") {
           setSolved(true);
         }
-        newColorRows[currectActiveWordRow - 1] = colors;
+        newColorRows[currectActiveWordRow - 1] = colors.split("");
       })
       .then(() => {
         setColorRows(newColorRows);
       })
       .catch((err) => {});
-
-    //fill in the previous color row with colors
   };
 
   const deleteLastLetter = () => {
@@ -138,6 +139,18 @@ function Grid(props) {
       updateCompletedRow();
     }
   }, [currectActiveWordRow]);
+
+  useEffect(() => {
+    if (currectActiveWordRow > 0) {
+      const newSolSet = SolutionSetAfterGuess(
+        solutionSet,
+        wordRows[currectActiveWordRow - 1].join(""),
+        colorRows[currectActiveWordRow - 1].join("")
+      );
+
+      setSolutionSet(newSolSet);
+    }
+  }, [colorRows]);
 
   useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
