@@ -83,6 +83,29 @@ function Grid(props) {
     });
   }
 
+  function handleShareClicked(e) {
+    var shareText = "Wordle 001: " + currectActiveWordRow.toString() + "/6\n";
+    for (var i = 0; i < colorRows.length; i++) {
+      for (var j = 0; j < colorRows[i].length; j++) {
+        switch (colorRows[i][j]) {
+          case "g":
+            shareText += "🟩";
+            break;
+          case "r":
+            shareText += "⬜️";
+            break;
+          case "y":
+            shareText += "🟨";
+            break;
+          default:
+            shareText += "";
+        }
+      }
+      shareText += "\n";
+    }
+    navigator.clipboard.writeText(shareText);
+  }
+
   // Handle Key presses
   const keyDownHandler = (event) => {
     if (!solved) {
@@ -145,6 +168,14 @@ function Grid(props) {
           onClick={handleNextGuessClicked}
         >
           Click on me to reveal the best next guess!
+        </Button>
+      )}
+      {solved && (
+        <Button
+          className="my-5 justify-content-center btn-primary"
+          onClick={handleShareClicked}
+        >
+          Share your grid!
         </Button>
       )}
     </div>
