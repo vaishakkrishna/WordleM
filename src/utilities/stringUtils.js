@@ -67,11 +67,8 @@ const produceMatchFunc = (guess, colors) =>{
     }
   }
   let traversalOrder = [].concat(greenIndices, yellowIndices, greyIndices)
-
   const func =  (word) => {
-    
-    word = word.split("")
-    
+  word = word.split("")  
     for (const i of traversalOrder){
 
       switch (colors[i].toUpperCase()) {
