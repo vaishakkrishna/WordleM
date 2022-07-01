@@ -18,9 +18,12 @@ function WordBox(props) {
 				"p3",
 				{ "bg-color-green": props.color === "g" },
 				{ "bg-color-yellow": props.color === "y" },
-				{ "bg-color-grey": props.color === "r" },
-        { "flip-animation": props.color === "g" || props.color === "y" || props.color === "r" },
-        { "computing-animation": props.animate }
+				{ "bg-color-grey": props.color === "r" || props.color === "" },
+				{
+					"flip-animation":
+						props.color === "g" || props.color === "y" || props.color === "r",
+				},
+				{ "computing-animation": props.animate }
 			)}
 		>
 			{isLetter(props.value) ? props.value : " "}

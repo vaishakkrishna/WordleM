@@ -1,4 +1,5 @@
 import { allWordsList } from "./wordLists";
+
 export function produceGuess(solutionSet, firstRow) {
 
     return new Promise((resolve, reject) => {
@@ -9,6 +10,14 @@ export function produceGuess(solutionSet, firstRow) {
             resolve(solutionSet[0].toUpperCase())
         }
         else{
+            getHighestEntropy(solutionSet).then(bestGuess => {resolve(bestGuess.toUpperCase())});
+            
+    }
+    });
+}
+
+function getHighestEntropy(solutionSet){
+    return new Promise((resolve, reject) => {
         let bestGuess = "";
         let bestEntropy = 0;
         for (let i = 0; i < allWordsList.length; i++) {
@@ -20,12 +29,9 @@ export function produceGuess(solutionSet, firstRow) {
                 bestEntropy = entropy;
             }
         }
-        console.log(solutionSet)
-        resolve(bestGuess.toUpperCase());
-    }
-    });
+        resolve(bestGuess);
+});
 }
-
 // Return E[information] for a given word (guess) and solution set
 function getEntropy(word, solutionSet){
 

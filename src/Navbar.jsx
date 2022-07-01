@@ -11,15 +11,15 @@ function Navbar() {
             Home
           </Nav.Link>
         </Nav.Item>
-
+{/* 
         <Nav.Item>
           <Nav.Link className="navbar-custom" href="/Solver">
             Solver
           </Nav.Link>
-        </Nav.Item>
+        </Nav.Item> */}
         <Nav.Item>
           <Nav.Link className="navbar-custom" href="/Helper">
-            Helper
+            Wordle
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>

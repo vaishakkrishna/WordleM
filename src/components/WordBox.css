@@ -23,8 +23,9 @@
   }
 
 .computing-animation{
-    animation: computing 1s
+    animation: flip 1s ease forwards
 }
+
 /* netNinja flip animation */
 @keyframes flip {
     0%{
@@ -41,14 +42,3 @@
     }
 }
 
-@keyframes computing{
-  0%{
-    background-color: #3a3a3c;
-  }
-  30%{
-    background-color: #538d4e;
-  }
-  70%{
-    background-color: #b59f3b;
-  }
-}

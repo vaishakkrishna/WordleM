@@ -92,12 +92,8 @@ function Grid(props) {
 			alert("You have already solved this puzzle!");
 			return;
 		}
-    setIsComputing(true);
-		produceGuess(solutionSet, currectActiveWordRow === 0).then((nextGuess) => {
-			// fill in the next guess
-			fillInWord(nextGuess);
-			setIsComputing(false);
-		});
+    	setIsComputing(true);
+		
 	}
 
 	function handleShareClicked(e) {
@@ -169,6 +165,15 @@ function Grid(props) {
 		};
 	});
 
+	useEffect(() => {
+		if (isComputing){
+			produceGuess(solutionSet, currectActiveWordRow === 0).then((nextGuess) => {
+				// fill in the next guess
+				fillInWord(nextGuess);
+				setIsComputing(false);
+			});
+		}
+	}, [isComputing]);
 	var rows = [];
 
 	for (var i = 0; i < 6; i++) {
