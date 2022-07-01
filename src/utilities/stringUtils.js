@@ -80,10 +80,11 @@ const produceMatchFunc = (guess, colors) =>{
         break
 
       case "Y":
-        if (!(word.includes(guess[i]))){
+        let index = word.indexOf(guess[i])
+        if (index === -1){
           return false;
         }
-        word[i] = "_";
+        word[index] = "_";
         break;
 
       case "R":

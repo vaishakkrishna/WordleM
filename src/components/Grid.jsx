@@ -81,7 +81,7 @@ function Grid(props) {
 		// get the next guess from api
 		produceGuess(solutionSet).then((nextGuess) => {
 			// fill in the next guess
-			fillInWord(nextGuess);
+				fillInWord(nextGuess);
 		});
 	}
 
