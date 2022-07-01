@@ -1,13 +1,14 @@
 import { allWordsList } from "./wordLists";
-export function produceGuess(solutionSet) {
+export function produceGuess(solutionSet, firstRow) {
 
     return new Promise((resolve, reject) => {
-        if (solutionSet.length === allWordsList.length){
+        if (firstRow){
             resolve("CRANE");
         }
-        if (solutionSet.length <= 2){
+        else if (solutionSet.length <= 2){
             resolve(solutionSet[0].toUpperCase())
         }
+        else{
         let bestGuess = "";
         let bestEntropy = 0;
         for (let i = 0; i < allWordsList.length; i++) {
@@ -21,6 +22,7 @@ export function produceGuess(solutionSet) {
         }
         console.log(solutionSet)
         resolve(bestGuess.toUpperCase());
+    }
     });
 }
 

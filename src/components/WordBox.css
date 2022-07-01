@@ -21,6 +21,10 @@
 .bg-color-none{
     background-color: #3a3a3c;
   }
+
+.computing-animation{
+    animation: computing 1s
+}
 /* netNinja flip animation */
 @keyframes flip {
     0%{
@@ -35,4 +39,16 @@
     100%{
         transform: rotateX(0deg);
     }
+}
+
+@keyframes computing{
+  0%{
+    background-color: #3a3a3c;
+  }
+  30%{
+    background-color: #538d4e;
+  }
+  70%{
+    background-color: #b59f3b;
+  }
 }

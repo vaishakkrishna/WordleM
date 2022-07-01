@@ -9,7 +9,7 @@ import {
 	getColorsFromGuess,
 	getNextGuessFromGrid,
 	SolutionSetAfterGuess,
-  createAllPatterns,
+	createAllPatterns,
 } from "../utilities/stringUtils";
 import { allWordsList } from "../utilities/wordLists";
 import { produceGuess } from "../utilities/solverUtils";
@@ -28,6 +28,8 @@ function Grid(props) {
 	);
 	const [solved, setSolved] = useState(false);
 	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
+	const [isComputing, setIsComputing] = useState(false);
+
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -63,6 +65,13 @@ function Grid(props) {
 			})
 			.then(() => {
 				setColorRows(newColorRows);
+				const newSolSet = SolutionSetAfterGuess(
+					solutionSet,
+					wordRows[currectActiveWordRow - 1].join(""),
+					newColorRows[currectActiveWordRow - 1].join("")
+				);
+
+				setSolutionSet(newSolSet);
 			})
 			.catch((err) => {});
 	};
@@ -79,9 +88,15 @@ function Grid(props) {
 	//Handle button presses
 	function handleNextGuessClicked(e) {
 		// get the next guess from api
-		produceGuess(solutionSet).then((nextGuess) => {
+		if (solved) {
+			alert("You have already solved this puzzle!");
+			return;
+		}
+    setIsComputing(true);
+		produceGuess(solutionSet, currectActiveWordRow === 0).then((nextGuess) => {
 			// fill in the next guess
-				fillInWord(nextGuess);
+			fillInWord(nextGuess);
+			setIsComputing(false);
 		});
 	}
 
@@ -135,28 +150,16 @@ function Grid(props) {
 		}
 	};
 
-  /** 
-   * 
-   * SECTION FOR HOOKS
-   * 
-   */
+	/**
+	 *
+	 * SECTION FOR HOOKS
+	 *
+	 */
 	useEffect(() => {
 		if (currectActiveWordRow > 0) {
 			updateCompletedRow();
 		}
 	}, [currectActiveWordRow]);
-
-	useEffect(() => {
-		if (currectActiveWordRow > 0) {
-			const newSolSet = SolutionSetAfterGuess(
-				solutionSet,
-				wordRows[currectActiveWordRow - 1].join(""),
-				colorRows[currectActiveWordRow - 1].join("")
-			);
-
-			setSolutionSet(newSolSet);
-		}
-	}, [colorRows]);
 
 	useEffect(() => {
 		document.addEventListener("keydown", keyDownHandler);
@@ -174,6 +177,7 @@ function Grid(props) {
 				key={i}
 				wordRowValue={wordRows[i]}
 				colorRowValue={colorRows[i]}
+				animate={isComputing}
 			/>
 		);
 	}
