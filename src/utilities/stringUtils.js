@@ -66,38 +66,35 @@ const produceMatchFunc = (guess, colors) =>{
       greyIndices.push(i);
     }
   }
-  let traversalOrder = [].concat(greenIndices, yellowIndices, greyIndices)
+ let traversalOrder = [].concat(greenIndices, yellowIndices, greyIndices)
   const func =  (word) => {
   word = word.split("")  
-    for (const i of traversalOrder){
+  for (const i of traversalOrder){
+    switch (colors[i].toUpperCase()) {
 
-      switch (colors[i].toUpperCase()) {
-        case "G":
-          if (word[i] !== guess[i]){
-            return false;
-          }
-          word[i] = "_";
-          break
-
-        case "Y":
-
-          if (!(word.includes(guess[i]))){
-            return false;
-          }
-          word[i] = "_";
-          break;
-        case "R":
-          if (word.includes(guess[i])){
-            
-            return false;
-          }
-          break;
-        default:
-          
+      case "G":
+        if (word[i] !== guess[i]){
           return false;
-        
+        }
+        word[i] = "_";
+        break
+
+      case "Y":
+        if (!(word.includes(guess[i]))){
+          return false;
+        }
+        word[i] = "_";
+        break;
+
+      case "R":
+        if (word.includes(guess[i])){
+          return false;
+        }
+        break;
+      default: 
+        return false; 
     }
-    }
+  }
    
     return true;
   }
