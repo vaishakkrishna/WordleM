@@ -1,6 +1,13 @@
 import { allWordsList } from "./wordLists";
 export function produceGuess(solutionSet) {
+
     return new Promise((resolve, reject) => {
+        if (solutionSet.length === allWordsList.length){
+            resolve("CRANE");
+        }
+        if (solutionSet.length <= 2){
+            resolve(solutionSet[0].toUpperCase())
+        }
         let bestGuess = "";
         let bestEntropy = 0;
         for (let i = 0; i < allWordsList.length; i++) {
@@ -12,7 +19,8 @@ export function produceGuess(solutionSet) {
                 bestEntropy = entropy;
             }
         }
-        resolve(bestGuess)
+        console.log(solutionSet)
+        resolve(bestGuess.toUpperCase());
     });
 }
 
@@ -23,11 +31,13 @@ function getEntropy(word, solutionSet){
     var result = 0;
 
     // calculate the probability distribution of patterns
-    console.log(word, solutionSet);
+
     const patternDist = getPatternDistribution(word, solutionSet);
-    console.log(patternDist)
+
     for (let pattern in patternDist){
-        result += patternDist[pattern] * Math.log2(patternDist[pattern]);
+        let info = patternDist[pattern] * Math.log2(1/patternDist[pattern])
+
+        result += info;
     }
 
     return result

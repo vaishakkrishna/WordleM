@@ -27,7 +27,6 @@ function Grid(props) {
 	);
 	const [solved, setSolved] = useState(false);
 	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
-
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
