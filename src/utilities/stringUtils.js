@@ -101,5 +101,22 @@ const produceMatchFunc = (guess, colors) =>{
   }
 
   return func;
-  }
+}
   
+
+
+export function createAllPatterns(){
+  const patternMap = {0: "r", 1: "y", 2: "g"}
+  const allPatterns = []
+  for (let i = 0; i < 3; i++){
+    for (let j = 0; j < 3; j++){
+      for (let k = 0; k < 3; k++){
+        for (let l = 0; l < 3; l++){
+          for (let m = 0; m < 3; m++){
+            allPatterns.push([patternMap[i], patternMap[j], patternMap[k], patternMap[l], patternMap[m]].join(""))
+          }
+        }
+      }
+    }
+  }
+}

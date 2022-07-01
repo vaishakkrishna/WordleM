@@ -9,6 +9,7 @@ import {
 	getColorsFromGuess,
 	getNextGuessFromGrid,
 	SolutionSetAfterGuess,
+  createAllPatterns,
 } from "../utilities/stringUtils";
 import { allWordsList } from "../utilities/wordLists";
 import { produceGuess } from "../utilities/solverUtils";
@@ -134,6 +135,11 @@ function Grid(props) {
 		}
 	};
 
+  /** 
+   * 
+   * SECTION FOR HOOKS
+   * 
+   */
 	useEffect(() => {
 		if (currectActiveWordRow > 0) {
 			updateCompletedRow();

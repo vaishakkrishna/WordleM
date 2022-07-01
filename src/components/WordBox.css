@@ -5,10 +5,34 @@
   }
 .bg-color-green {
     background-color: #538d4e;
+
   }
-.bg-color-yellow{
+.bg-color-yellow {
     background-color: #b59f3b;
+
   }
 .bg-color-grey{
     background-color: #3a3a3c;
+
   }
+.flip-animation{
+    animation: flip 0.5s ease forwards
+}
+.bg-color-none{
+    background-color: #3a3a3c;
+  }
+/* netNinja flip animation */
+@keyframes flip {
+    0%{
+        transform: rotateX(0deg);
+    }
+    45%{
+        transform: rotateX(90deg);
+    }
+    55%{
+        transform: rotateX(90deg);
+    }
+    100%{
+        transform: rotateX(0deg);
+    }
+}
