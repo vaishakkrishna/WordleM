@@ -3,6 +3,10 @@
     font-family: "Monaco", "Courier New", monospace;
     font-size: 30;
   }
+
+.lighter-border {
+  border: rgb(99, 99, 99) solid 2px;
+}
 .bg-color-green {
     background-color: #538d4e;
 

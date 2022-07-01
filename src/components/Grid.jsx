@@ -70,7 +70,7 @@ function Grid(props) {
 					wordRows[currectActiveWordRow - 1].join(""),
 					newColorRows[currectActiveWordRow - 1].join("")
 				);
-
+				console.log(newSolSet);
 				setSolutionSet(newSolSet);
 			})
 			.catch((err) => {});

@@ -9,8 +9,7 @@ function WordBox(props) {
 	return (
 		<p
 			className={classNames(
-				"border",
-				"border-dark",
+				"lighter-border",
 				"rounded-sm",
 				"py-3",
 				"px-4",
