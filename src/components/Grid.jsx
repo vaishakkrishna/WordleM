@@ -14,7 +14,9 @@ import {
 import { allWordsList } from "../utilities/wordLists";
 import { produceGuess } from "../utilities/solverUtils";
 
+
 function Grid(props) {
+	//WebWorker
 	/**
 	 * STATE VARIABLES
 	 **/
@@ -29,7 +31,7 @@ function Grid(props) {
 	const [solved, setSolved] = useState(false);
 	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
 	const [isComputing, setIsComputing] = useState(false);
-
+	const [syncWithWordle, setSyncWithWordle] = useState(false);
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -85,14 +87,18 @@ function Grid(props) {
 		}
 	};
 
-	//Handle button presses
+	//Handle button presses for next guess
 	function handleNextGuessClicked(e) {
 		// get the next guess from api
 		if (solved) {
 			alert("You have already solved this puzzle!");
 			return;
 		}
-    	setIsComputing(true);
+		if (isComputing) {
+			alert("Please wait for the solver to finish computing!");
+			return;
+		}
+		setIsComputing(true);
 		
 	}
 
@@ -166,12 +172,14 @@ function Grid(props) {
 	});
 
 	useEffect(() => {
-		if (isComputing){
-			produceGuess(solutionSet, currectActiveWordRow === 0).then((nextGuess) => {
-				// fill in the next guess
-				fillInWord(nextGuess);
-				setIsComputing(false);
-			});
+		if (isComputing) {
+			produceGuess(solutionSet, currectActiveWordRow === 0).then(
+				(nextGuess) => {
+					// fill in the next guess
+					fillInWord(nextGuess);
+					setIsComputing(false);
+				}
+			);
 		}
 	}, [isComputing]);
 	var rows = [];
@@ -206,6 +214,11 @@ function Grid(props) {
 					Share your grid!
 				</Button>
 			)}
+			{syncWithWordle && (
+			<div className="align-content-center">
+				
+			<iframe src="https://www.nytimes.com/games/wordle/index.html" height="400px" width="400px"/>
+			</div>)}
 		</div>
 	);
 }

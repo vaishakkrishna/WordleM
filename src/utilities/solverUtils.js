@@ -6,13 +6,12 @@ export function produceGuess(solutionSet, firstRow) {
         if (firstRow){
             resolve("CRANE");
         }
-        else if (solutionSet.length <= 2){
+        else if (solutionSet.length <= 2) {
             resolve(solutionSet[0].toUpperCase())
         }
-        else{
+        else {
             getHighestEntropy(solutionSet).then(bestGuess => {resolve(bestGuess.toUpperCase())});
-            
-    }
+        }
     });
 }
 
@@ -30,7 +29,7 @@ function getHighestEntropy(solutionSet){
             }
         }
         resolve(bestGuess);
-});
+    });
 }
 // Return E[information] for a given word (guess) and solution set
 function getEntropy(word, solutionSet){
