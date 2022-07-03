@@ -7,13 +7,10 @@ import {
 	generateEmptyBoard,
 	isValidWord,
 	getColorsFromGuess,
-	getNextGuessFromGrid,
 	SolutionSetAfterGuess,
-	createAllPatterns,
 } from "../utilities/stringUtils";
 import { allWordsList } from "../utilities/wordLists";
-import { produceGuess } from "../utilities/solverUtils";
-
+import { produceGuess, getEntropy } from "../utilities/solverUtils";
 
 function Grid(props) {
 	//WebWorker
@@ -32,6 +29,8 @@ function Grid(props) {
 	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
 	const [isComputing, setIsComputing] = useState(false);
 	const [syncWithWordle, setSyncWithWordle] = useState(false);
+	const [skillScores, setSkillScores] = useState([0, 0, 0, 0, 0, 0]);
+
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -74,6 +73,13 @@ function Grid(props) {
 				);
 				console.log(newSolSet);
 				setSolutionSet(newSolSet);
+				const newSkillScores = [...skillScores];
+				newSkillScores[currectActiveWordRow - 1] = getEntropy(
+					wordRows[currectActiveWordRow - 1].join("").toLowerCase(),
+					solutionSet
+				);
+
+				setSkillScores(newSkillScores);
 			})
 			.catch((err) => {});
 	};
@@ -99,7 +105,6 @@ function Grid(props) {
 			return;
 		}
 		setIsComputing(true);
-		
 	}
 
 	function handleShareClicked(e) {
@@ -191,6 +196,7 @@ function Grid(props) {
 				wordRowValue={wordRows[i]}
 				colorRowValue={colorRows[i]}
 				animate={isComputing}
+				skill={skillScores[i]}
 			/>
 		);
 	}
@@ -215,10 +221,14 @@ function Grid(props) {
 				</Button>
 			)}
 			{syncWithWordle && (
-			<div className="align-content-center">
-				
-			<iframe src="https://www.nytimes.com/games/wordle/index.html" height="400px" width="400px"/>
-			</div>)}
+				<div className="align-content-center">
+					<iframe
+						src="https://www.nytimes.com/games/wordle/index.html"
+						height="400px"
+						width="400px"
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -10,12 +10,12 @@ export function produceGuess(solutionSet, firstRow) {
             resolve(solutionSet[0].toUpperCase())
         }
         else {
-            getHighestEntropy(solutionSet).then(bestGuess => {resolve(bestGuess.toUpperCase())});
+            getHighestEntropyWord(solutionSet).then(bestGuess => {resolve(bestGuess.toUpperCase())});
         }
     });
 }
 
-function getHighestEntropy(solutionSet){
+function getHighestEntropyWord(solutionSet, returnEntropy = false){
     return new Promise((resolve, reject) => {
         let bestGuess = "";
         let bestEntropy = 0;
@@ -28,11 +28,18 @@ function getHighestEntropy(solutionSet){
                 bestEntropy = entropy;
             }
         }
-        resolve(bestGuess);
+        console.log("Best guess: " + bestEntropy);
+        if (returnEntropy){
+            resolve([bestGuess], bestEntropy);
+        }
+        else{
+            resolve(bestGuess);    
+        }
+        
     });
 }
 // Return E[information] for a given word (guess) and solution set
-function getEntropy(word, solutionSet){
+export function getEntropy(word, solutionSet) {
 
     //initialize result
     var result = 0;
@@ -41,7 +48,8 @@ function getEntropy(word, solutionSet){
 
     const patternDist = getPatternDistribution(word, solutionSet);
 
-    for (let pattern in patternDist){
+    for (let pattern in patternDist) {
+
         let info = patternDist[pattern] * Math.log2(1/patternDist[pattern])
 
         result += info;
