@@ -11,9 +11,12 @@ import {
 } from "../utilities/stringUtils";
 import { allWordsList } from "../utilities/wordLists";
 import { produceGuess, getEntropy } from "../utilities/solverUtils";
+import WorkerBuilder from "../utilities/worker/worker-builder";
+import Worker from "../utilities/worker/guess-generate-worker";
 
 function Grid(props) {
 	//WebWorker
+	const myWorker = new WorkerBuilder(Worker);
 	/**
 	 * STATE VARIABLES
 	 **/
@@ -104,6 +107,7 @@ function Grid(props) {
 			alert("Please wait for the solver to finish computing!");
 			return;
 		}
+		myWorker.postMessage([solutionSet, currectActiveWordRow === 0]);
 		setIsComputing(true);
 	}
 
@@ -170,21 +174,22 @@ function Grid(props) {
 
 	useEffect(() => {
 		document.addEventListener("keydown", keyDownHandler);
-
+		
 		return function cleanup() {
 			document.removeEventListener("keydown", keyDownHandler);
 		};
 	});
 
 	useEffect(() => {
+
 		if (isComputing) {
-			produceGuess(solutionSet, currectActiveWordRow === 0).then(
-				(nextGuess) => {
-					// fill in the next guess
-					fillInWord(nextGuess);
-					setIsComputing(false);
-				}
-			);
+			// produceGuess(solutionSet, currectActiveWordRow === 0).then(
+			// 	(nextGuess) => {
+			// 		// fill in the next guess
+			// 		fillInWord(nextGuess);
+			// 		setIsComputing(false);
+			// 	}
+			// );
 		}
 	}, [isComputing]);
 	var rows = [];

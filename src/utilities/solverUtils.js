@@ -15,22 +15,25 @@ export function produceGuess(solutionSet, firstRow) {
     });
 }
 
-function getHighestEntropyWord(solutionSet, returnEntropy = false){
+function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy = false){
     return new Promise((resolve, reject) => {
         let bestGuess = "";
-        let bestEntropy = 0;
+        let highestEntropy = 0;
+        let lowestEntropy = Infinity;
         for (let i = 0; i < allWordsList.length; i++) {
             const word = allWordsList[i];
             let entropy = getEntropy(word, solutionSet);
-            if (entropy > bestEntropy) {
+            if (entropy > highestEntropy) {
                 bestGuess = word;
-                
-                bestEntropy = entropy;
+                highestEntropy = entropy;
+            }
+            if (entropy < lowestEntropy) {
+                lowestEntropy = entropy;
             }
         }
-        console.log("Best guess: " + bestEntropy);
-        if (returnEntropy){
-            resolve([bestGuess], bestEntropy);
+        console.log("Best guess: " + highestEntropy);
+        if (returnHighestAndLowestEntropy){
+            resolve([bestGuess, highestEntropy, lowestEntropy]);
         }
         else{
             resolve(bestGuess);    
