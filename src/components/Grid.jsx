@@ -9,7 +9,7 @@ import {
 	getColorsFromGuess,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
-import { allWordsList } from "../utilities/wordLists";
+import { allWordsList, allSolutionsList } from "../utilities/wordLists";
 import { produceGuess, getEntropy } from "../utilities/solverUtils";
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
@@ -29,7 +29,7 @@ function Grid(props) {
 		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
 	);
 	const [solved, setSolved] = useState(false);
-	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
+	const [solutionSet, setSolutionSet] = useState([...allSolutionsList]);
 	const [isComputing, setIsComputing] = useState(false);
 	const [syncWithWordle, setSyncWithWordle] = useState(false);
 	const [skillScores, setSkillScores] = useState([]);
@@ -39,7 +39,7 @@ function Grid(props) {
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["CRANE", 5.43, 1.23],
+		["0", 5.43, 1.23],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -218,6 +218,7 @@ function Grid(props) {
 		//recieve result from worker
 		myWorker.onmessage = (e) => {
 			let newOptimalGuesses = [...optimalGuesses];
+			console.log(e.data);
 			newOptimalGuesses[e.data[1]][0] = e.data[0];
 			setOptimalGuesses(newOptimalGuesses);
 			console.log(newOptimalGuesses);

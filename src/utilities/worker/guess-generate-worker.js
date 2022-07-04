@@ -29,7 +29,7 @@ function produceGuess(solutionSet, firstRow) {
 
 }
 
-function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy = true){
+function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy=true){
 
         let bestGuess = "";
         let highestEntropy = 0;
@@ -47,6 +47,7 @@ function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy = true
         }
         if (returnHighestAndLowestEntropy){
           return [bestGuess, highestEntropy, lowestEntropy]
+        
         }
         else {
             return bestGuess;    
