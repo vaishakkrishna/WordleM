@@ -5,9 +5,9 @@ export default () => {
     self.onmessage = (message) => {
       
       const solutionSet = message.data[0];
-      const firstRow = message.data[1];
+      const firstRow = message.data[1] === 0;
       const result = produceGuess(solutionSet, firstRow);
-      postMessage(result);
+      postMessage([result, message.data[1]]);
     };
 
 
@@ -29,7 +29,7 @@ function produceGuess(solutionSet, firstRow) {
 
 }
 
-function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy = false){
+function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy = true){
 
         let bestGuess = "";
         let highestEntropy = 0;
@@ -122,6 +122,7 @@ function patternOfWordGivenSolution(word, solution){
 
             if (solution.includes(word[i]) && frequencies[word[i]] > 0){
                 result[i] = "y";
+                frequencies[word[i]] -= 1;
             }
             else if (result[i] === "x") {
                 result[i] = "r";

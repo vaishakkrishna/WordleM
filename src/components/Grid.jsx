@@ -34,8 +34,18 @@ function Grid(props) {
 	const [syncWithWordle, setSyncWithWordle] = useState(false);
 	const [skillScores, setSkillScores] = useState([]);
 
-	// in the form [["crane", 5.43], ["louts", 6.23]...]
-	const [optimalGuesses, setOptimalGuesses] = useState(["CRANE"]);
+	//in the form [[solutionSet, rowToCalculate]...]
+	const [workerStack, setWorkerStack] = useState([]);
+
+	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
+	const [optimalGuesses, setOptimalGuesses] = useState([
+		["CRANE", 5.43, 1.23],
+		["", 0, 0],
+		["", 0, 0],
+		["", 0, 0],
+		["", 0, 0],
+		["", 0, 0],
+	]);
 
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
@@ -71,7 +81,10 @@ function Grid(props) {
 				newColorRows[currentActiveWordRow - 1] = colors.split("");
 			})
 			.then(() => {
+				// Sets colors of prev. row
 				setColorRows(newColorRows);
+
+				// Computes and sets the new solution set
 				const newSolSet = SolutionSetAfterGuess(
 					solutionSet,
 					wordRows[currentActiveWordRow - 1].join(""),
@@ -79,21 +92,30 @@ function Grid(props) {
 				);
 				console.log(newSolSet);
 				setSolutionSet(newSolSet);
+
+				// Computes and sets the skill scores
 				const newSkillScores = [...skillScores];
-				newSkillScores[currentActiveWordRow - 1] = getEntropy(
+				const bestEntropy = getEntropy(
+					optimalGuesses[currentActiveWordRow - 1][1]
+				);
+				const worstEntropy = getEntropy(
+					optimalGuesses[currentActiveWordRow - 1][2]
+				);
+				const actualEntropy = getEntropy(
 					wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
 					solutionSet
 				);
 
+				newSkillScores[currentActiveWordRow - 1] =
+					(actualEntropy - worstEntropy) / (bestEntropy - worstEntropy);
 				setSkillScores(newSkillScores);
+
 				// figure out the next best guess in the background
-				if (currentActiveWordRow < wordRows.length) {
-					myWorker.onmessage = (e) => {
-						let newOptimalGuesses = [...optimalGuesses];
-						newOptimalGuesses.push(e.data);
-						setOptimalGuesses(newOptimalGuesses);
-					};
-					myWorker.postMessage([newSolSet, currentActiveWordRow === 0]);
+				if (optimalGuesses[currentActiveWordRow][0] === "") {
+					console.log("Computing next best guess");
+					const newWS = [...workerStack];
+					newWS.push([newSolSet, currentActiveWordRow]);
+					setWorkerStack(newWS);
 				}
 			})
 			.catch((err) => {});
@@ -119,10 +141,9 @@ function Grid(props) {
 			return;
 		}
 		// Worker has computed the next best guess
-		if (optimalGuesses.length - 1 === currentActiveWordRow) {
+		if (optimalGuesses[currentActiveWordRow][0] !== "") {
 			// fill in word
-			fillInWord(optimalGuesses[currentActiveWordRow]);
-
+			fillInWord(optimalGuesses[currentActiveWordRow][0]);
 			return;
 		}
 		// Worker is computing the next best guess
@@ -160,6 +181,7 @@ function Grid(props) {
 				deleteLastLetter();
 			} else if (
 				//check if a letter is entered
+				!isComputing &&
 				isAlphabetic(event.key) &&
 				currentActiveLetter < 5 &&
 				event.key.length === 1
@@ -192,15 +214,29 @@ function Grid(props) {
 
 	useEffect(() => {
 		document.addEventListener("keydown", keyDownHandler);
-		// myWorker.postMessage([solutionSet, currentActiveWordRow === 0]);
+
+		//recieve result from worker
+		myWorker.onmessage = (e) => {
+			let newOptimalGuesses = [...optimalGuesses];
+			newOptimalGuesses[e.data[1]][0] = e.data[0];
+			setOptimalGuesses(newOptimalGuesses);
+			console.log(newOptimalGuesses);
+		};
+
 		return function cleanup() {
 			document.removeEventListener("keydown", keyDownHandler);
 		};
 	});
 
 	useEffect(() => {
-		if (isComputing && optimalGuesses.length === currentActiveWordRow + 1) {
-			fillInWord(optimalGuesses[currentActiveWordRow]);
+		if (workerStack.length > 0) {
+			myWorker.postMessage(workerStack.pop());
+		}
+	}, [workerStack]);
+
+	useEffect(() => {
+		if (isComputing && optimalGuesses[currentActiveWordRow][0] !== "") {
+			fillInWord(optimalGuesses[currentActiveWordRow][0]);
 			setIsComputing(false);
 			// produceGuess(solutionSet, currentActiveWordRow === 0).then(
 			// 	(nextGuess) => {
@@ -210,6 +246,7 @@ function Grid(props) {
 			// );
 		}
 	}, [optimalGuesses, isComputing]);
+
 	var rows = [];
 
 	for (var i = 0; i < 6; i++) {
