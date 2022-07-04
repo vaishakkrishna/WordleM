@@ -33,13 +33,13 @@ function Grid(props) {
 	const [isComputing, setIsComputing] = useState(false);
 	const [syncWithWordle, setSyncWithWordle] = useState(false);
 	const [skillScores, setSkillScores] = useState([]);
-
+	const [backgroundComputing, setBackgroundComputing] = useState(false);
 	//in the form [[solutionSet, rowToCalculate]...]
 	const [workerStack, setWorkerStack] = useState([]);
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["0", 5.43, 1.23],
+		["CRANE", 5.37, 1.23],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -91,23 +91,27 @@ function Grid(props) {
 					newColorRows[currentActiveWordRow - 1].join("")
 				);
 				console.log(newSolSet);
-				setSolutionSet(newSolSet);
 
 				// Computes and sets the skill scores
 				const newSkillScores = [...skillScores];
-				const bestEntropy = getEntropy(
-					optimalGuesses[currentActiveWordRow - 1][1]
-				);
-				const worstEntropy = getEntropy(
-					optimalGuesses[currentActiveWordRow - 1][2]
-				);
+
+				const bestEntropy = optimalGuesses[currentActiveWordRow - 1][1];
+
+				const worstEntropy = optimalGuesses[currentActiveWordRow - 1][2];
+
 				const actualEntropy = getEntropy(
 					wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
 					solutionSet
 				);
-
-				newSkillScores[currentActiveWordRow - 1] =
-					(actualEntropy - worstEntropy) / (bestEntropy - worstEntropy);
+				const skillScore =
+					bestEntropy === 0
+						? 100
+						: Math.round(
+								((actualEntropy - worstEntropy) /
+									(bestEntropy - worstEntropy)) *
+									100
+						  );
+				newSkillScores[currentActiveWordRow - 1] = skillScore;
 				setSkillScores(newSkillScores);
 
 				// figure out the next best guess in the background
@@ -117,6 +121,7 @@ function Grid(props) {
 					newWS.push([newSolSet, currentActiveWordRow]);
 					setWorkerStack(newWS);
 				}
+				setSolutionSet(newSolSet);
 			})
 			.catch((err) => {});
 	};
@@ -143,6 +148,7 @@ function Grid(props) {
 		// Worker has computed the next best guess
 		if (optimalGuesses[currentActiveWordRow][0] !== "") {
 			// fill in word
+			console.log(optimalGuesses[currentActiveWordRow[0]]);
 			fillInWord(optimalGuesses[currentActiveWordRow][0]);
 			return;
 		}
@@ -190,6 +196,7 @@ function Grid(props) {
 				fillInLetter(letter);
 				// check if Row is completed
 			} else if (
+				!backgroundComputing &&
 				event.key === "Enter" &&
 				currentActiveLetter === 5 &&
 				currentActiveWordRow < 6 &&
@@ -218,10 +225,10 @@ function Grid(props) {
 		//recieve result from worker
 		myWorker.onmessage = (e) => {
 			let newOptimalGuesses = [...optimalGuesses];
-			console.log(e.data);
-			newOptimalGuesses[e.data[1]][0] = e.data[0];
+			newOptimalGuesses[e.data[1]] = e.data[0];
 			setOptimalGuesses(newOptimalGuesses);
 			console.log(newOptimalGuesses);
+			setBackgroundComputing(false);
 		};
 
 		return function cleanup() {
@@ -232,6 +239,7 @@ function Grid(props) {
 	useEffect(() => {
 		if (workerStack.length > 0) {
 			myWorker.postMessage(workerStack.pop());
+			setBackgroundComputing(true);
 		}
 	}, [workerStack]);
 
@@ -239,12 +247,6 @@ function Grid(props) {
 		if (isComputing && optimalGuesses[currentActiveWordRow][0] !== "") {
 			fillInWord(optimalGuesses[currentActiveWordRow][0]);
 			setIsComputing(false);
-			// produceGuess(solutionSet, currentActiveWordRow === 0).then(
-			// 	(nextGuess) => {
-			// 		// fill in the next guess
-			//
-			// 	}
-			// );
 		}
 	}, [optimalGuesses, isComputing]);
 
@@ -290,6 +292,7 @@ function Grid(props) {
 					/>
 				</div>
 			)}
+			{backgroundComputing && <p>Computing, please wait</p>}
 		</div>
 	);
 }

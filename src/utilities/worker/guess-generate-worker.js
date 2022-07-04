@@ -18,13 +18,15 @@ function produceGuess(solutionSet, firstRow) {
 
 
         if (firstRow){
-            return "CRANE";
+            return ["CRANE", 5.43, 0];
         }
         else if (solutionSet.length <= 2) {
-            return solutionSet[0].toUpperCase()
+            return [solutionSet[0].toUpperCase(), 0, 0]
         }
         else {
-            return getHighestEntropyWord(solutionSet).toUpperCase()
+            const result = getHighestEntropyWord(solutionSet);
+            result[0] = result[0].toUpperCase();
+            return result
         }
 
 }
@@ -46,8 +48,7 @@ function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy=true){
             }
         }
         if (returnHighestAndLowestEntropy){
-          return [bestGuess, highestEntropy, lowestEntropy]
-        
+          return [bestGuess, Math.round(highestEntropy*100)/100, Math.round(lowestEntropy*100)/100]
         }
         else {
             return bestGuess;    
@@ -75,7 +76,7 @@ function getHighestEntropyWord(solutionSet, returnHighestAndLowestEntropy=true){
 }
 
 //Returns probability distribution of patterns in a solution set given the word
-function getPatternDistribution(word, solutionSet){
+function getPatternDistribution(word, solutionSet) {
     // loop through words in solution set, produce a pattern with the given word, and add to the distribution
     let patternDist = {};
     const individualProbability = 1/solutionSet.length;
@@ -122,8 +123,10 @@ function patternOfWordGivenSolution(word, solution){
     for (let i = 0; i < word.length; i++){
 
             if (solution.includes(word[i]) && frequencies[word[i]] > 0){
+
                 result[i] = "y";
                 frequencies[word[i]] -= 1;
+                
             }
             else if (result[i] === "x") {
                 result[i] = "r";
