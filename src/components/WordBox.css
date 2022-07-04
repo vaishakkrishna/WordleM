@@ -27,9 +27,23 @@
   }
 
 .computing-animation{
-    animation: flip 1s ease forwards
+    animation: cycleColor 1s infinite;
 }
 
+@keyframes cycleColor {
+  0% {
+    background-color: #3a3a3c;
+  }
+  25% {
+    background-color: #538d4e;
+  }
+  50% {
+    background-color: #b59f3b;
+  }
+  75% {
+    background-color: #3a3a3c;
+  }
+}
 /* netNinja flip animation */
 @keyframes flip {
     0%{

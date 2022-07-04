@@ -20,7 +20,7 @@ function Grid(props) {
 	/**
 	 * STATE VARIABLES
 	 **/
-	const [currectActiveWordRow, setCurrentActiveWordRow] = useState(0);
+	const [currentActiveWordRow, setCurrentActiveWordRow] = useState(0);
 	const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
 	const [wordRows, setWordRows] = useState(
 		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
@@ -32,26 +32,34 @@ function Grid(props) {
 	const [solutionSet, setSolutionSet] = useState([...allWordsList]);
 	const [isComputing, setIsComputing] = useState(false);
 	const [syncWithWordle, setSyncWithWordle] = useState(false);
-	const [skillScores, setSkillScores] = useState([0, 0, 0, 0, 0, 0]);
+	const [skillScores, setSkillScores] = useState([]);
 
+	// in the form [["crane", 5.43], ["louts", 6.23]...]
+	const [optimalGuesses, setOptimalGuesses] = useState(["CRANE"]);
+
+	myWorker.onmessage = (e) => {
+		let newOptimalGuesses = [...optimalGuesses];
+		newOptimalGuesses.push(e.data);
+		setOptimalGuesses(newOptimalGuesses);
+	};
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
 	const fillInWord = (wordAsString) => {
-		if (currectActiveWordRow >= wordRows.length) {
+		if (currentActiveWordRow >= wordRows.length) {
 			console.log("Attempting to fill in word after end of grid!");
 			return;
 		}
 		const newWordRows = JSON.parse(JSON.stringify(wordRows));
-		newWordRows[currectActiveWordRow] = wordAsString.split("");
+		newWordRows[currentActiveWordRow] = wordAsString.split("");
 		setWordRows(newWordRows);
-		setCurrentActiveWordRow(currectActiveWordRow + 1);
+		setCurrentActiveWordRow(currentActiveWordRow + 1);
 	};
 
 	// function to fill in current letter
 	const fillInLetter = (letter) => {
 		const newWordRows = JSON.parse(JSON.stringify(wordRows));
-		newWordRows[currectActiveWordRow][currentActiveLetter] =
+		newWordRows[currentActiveWordRow][currentActiveLetter] =
 			letter.toUpperCase();
 		setCurrentActiveLetter(currentActiveLetter + 1);
 		setWordRows(newWordRows);
@@ -60,29 +68,33 @@ function Grid(props) {
 	// Fills in colors of the previous row when it was completed
 	const updateCompletedRow = () => {
 		const newColorRows = JSON.parse(JSON.stringify(colorRows));
-		getColorsFromGuess(wordRows[currectActiveWordRow - 1])
+		getColorsFromGuess(wordRows[currentActiveWordRow - 1])
 			.then((colors) => {
 				if (colors === "ggggg") {
 					setSolved(true);
 				}
-				newColorRows[currectActiveWordRow - 1] = colors.split("");
+				newColorRows[currentActiveWordRow - 1] = colors.split("");
 			})
 			.then(() => {
 				setColorRows(newColorRows);
 				const newSolSet = SolutionSetAfterGuess(
 					solutionSet,
-					wordRows[currectActiveWordRow - 1].join(""),
-					newColorRows[currectActiveWordRow - 1].join("")
+					wordRows[currentActiveWordRow - 1].join(""),
+					newColorRows[currentActiveWordRow - 1].join("")
 				);
 				console.log(newSolSet);
 				setSolutionSet(newSolSet);
 				const newSkillScores = [...skillScores];
-				newSkillScores[currectActiveWordRow - 1] = getEntropy(
-					wordRows[currectActiveWordRow - 1].join("").toLowerCase(),
+				newSkillScores[currentActiveWordRow - 1] = getEntropy(
+					wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
 					solutionSet
 				);
 
 				setSkillScores(newSkillScores);
+				// figure out the next best guess in the background
+				if (currentActiveWordRow < wordRows.length) {
+					myWorker.postMessage([solutionSet, currentActiveWordRow === 0]);
+				}
 			})
 			.catch((err) => {});
 	};
@@ -90,7 +102,7 @@ function Grid(props) {
 	const deleteLastLetter = () => {
 		if (currentActiveLetter > 0) {
 			const newWordRows = JSON.parse(JSON.stringify(wordRows));
-			newWordRows[currectActiveWordRow][currentActiveLetter - 1] = "-";
+			newWordRows[currentActiveWordRow][currentActiveLetter - 1] = "-";
 			setCurrentActiveLetter(currentActiveLetter - 1);
 			setWordRows(newWordRows);
 		}
@@ -98,7 +110,6 @@ function Grid(props) {
 
 	//Handle button presses for next guess
 	function handleNextGuessClicked(e) {
-		// get the next guess from api
 		if (solved) {
 			alert("You have already solved this puzzle!");
 			return;
@@ -107,12 +118,19 @@ function Grid(props) {
 			alert("Please wait for the solver to finish computing!");
 			return;
 		}
-		myWorker.postMessage([solutionSet, currectActiveWordRow === 0]);
+		// Worker has computed the next best guess
+		if (optimalGuesses.length - 1 === currentActiveWordRow) {
+			// fill in word
+			fillInWord(optimalGuesses[currentActiveWordRow]);
+
+			return;
+		}
+		// Worker is computing the next best guess
 		setIsComputing(true);
 	}
 
 	function handleShareClicked(e) {
-		var shareText = "Wordle 001: " + currectActiveWordRow.toString() + "/6\n";
+		var shareText = "Wordle 001: " + currentActiveWordRow.toString() + "/6\n";
 		for (var i = 0; i < colorRows.length; i++) {
 			for (var j = 0; j < colorRows[i].length; j++) {
 				switch (colorRows[i][j]) {
@@ -152,11 +170,11 @@ function Grid(props) {
 			} else if (
 				event.key === "Enter" &&
 				currentActiveLetter === 5 &&
-				currectActiveWordRow < 6 &&
-				isValidWord(wordRows[currectActiveWordRow])
+				currentActiveWordRow < 6 &&
+				isValidWord(wordRows[currentActiveWordRow])
 			) {
 				setCurrentActiveLetter(0);
-				setCurrentActiveWordRow(currectActiveWordRow + 1);
+				setCurrentActiveWordRow(currentActiveWordRow + 1);
 			}
 		}
 	};
@@ -167,31 +185,31 @@ function Grid(props) {
 	 *
 	 */
 	useEffect(() => {
-		if (currectActiveWordRow > 0) {
+		if (currentActiveWordRow > 0) {
 			updateCompletedRow();
 		}
-	}, [currectActiveWordRow]);
+	}, [currentActiveWordRow]);
 
 	useEffect(() => {
 		document.addEventListener("keydown", keyDownHandler);
-		
+		// myWorker.postMessage([solutionSet, currentActiveWordRow === 0]);
 		return function cleanup() {
 			document.removeEventListener("keydown", keyDownHandler);
 		};
 	});
 
 	useEffect(() => {
-
-		if (isComputing) {
-			// produceGuess(solutionSet, currectActiveWordRow === 0).then(
+		if (isComputing && optimalGuesses.length === currentActiveWordRow + 1) {
+			fillInWord(optimalGuesses[currentActiveWordRow]);
+			setIsComputing(false);
+			// produceGuess(solutionSet, currentActiveWordRow === 0).then(
 			// 	(nextGuess) => {
 			// 		// fill in the next guess
-			// 		fillInWord(nextGuess);
-			// 		setIsComputing(false);
+			//
 			// 	}
 			// );
 		}
-	}, [isComputing]);
+	}, [optimalGuesses, isComputing]);
 	var rows = [];
 
 	for (var i = 0; i < 6; i++) {
@@ -200,7 +218,7 @@ function Grid(props) {
 				key={i}
 				wordRowValue={wordRows[i]}
 				colorRowValue={colorRows[i]}
-				animate={isComputing}
+				animate={isComputing && i === currentActiveWordRow}
 				skill={skillScores[i]}
 			/>
 		);
