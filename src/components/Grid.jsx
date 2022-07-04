@@ -37,11 +37,6 @@ function Grid(props) {
 	// in the form [["crane", 5.43], ["louts", 6.23]...]
 	const [optimalGuesses, setOptimalGuesses] = useState(["CRANE"]);
 
-	myWorker.onmessage = (e) => {
-		let newOptimalGuesses = [...optimalGuesses];
-		newOptimalGuesses.push(e.data);
-		setOptimalGuesses(newOptimalGuesses);
-	};
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -93,7 +88,12 @@ function Grid(props) {
 				setSkillScores(newSkillScores);
 				// figure out the next best guess in the background
 				if (currentActiveWordRow < wordRows.length) {
-					myWorker.postMessage([solutionSet, currentActiveWordRow === 0]);
+					myWorker.onmessage = (e) => {
+						let newOptimalGuesses = [...optimalGuesses];
+						newOptimalGuesses.push(e.data);
+						setOptimalGuesses(newOptimalGuesses);
+					};
+					myWorker.postMessage([newSolSet, currentActiveWordRow === 0]);
 				}
 			})
 			.catch((err) => {});
