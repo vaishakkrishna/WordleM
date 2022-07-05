@@ -15,31 +15,6 @@ function MyNavbar() {
 				</Nav>
 			</Container>
 		</Navbar>
-		// <div className="navbar-custom">
-		// 	<Nav variant="tabs" defaultActiveKey="/">
-		// 		<Nav.Item>
-		// 			<Nav.Link className="navbar-custom" href="/">
-		// 				Wordle
-		// 			</Nav.Link>
-		// 		</Nav.Item>
-		// 		<Nav.Item>
-		// 			<Nav.Link className="navbar-custom" href="/Freeplay">
-		// 				Freeplay
-		// 			</Nav.Link>
-		// 		</Nav.Item>
-		// 		<Nav.Item>
-		// 			<Nav.Link className="navbar-custom" href="/about">
-		// 				About
-		// 			</Nav.Link>
-		// 		</Nav.Item>
-
-		// 		{/* <Nav.Item>
-		//   <Nav.Link className="navbar-custom" href="/Scorer">
-		//     Scorer
-		//   </Nav.Link>
-		// </Nav.Item> */}
-		// 	</Nav>
-		// </div>
 	);
 }
 

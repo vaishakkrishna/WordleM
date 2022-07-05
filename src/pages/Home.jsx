@@ -16,11 +16,11 @@ function Home() {
 						</p>
 					</div>
 					<div className="my-5">
-						<Button variant="success" href="/Solver">
-							See it solve today's Wordle!
+						<Button variant="success" href="/">
+              Solve Today's Wordle
 						</Button>{" "}
-						<Button variant="info" href="/Scorer">
-							See how I did instead
+						<Button variant="info" href="/freeplay">
+              Freeplay
 						</Button>{" "}
 					</div>
 				</div>

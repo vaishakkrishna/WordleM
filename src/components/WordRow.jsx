@@ -1,6 +1,7 @@
 import React from "react";
 
 import WordBox from "./WordBox";
+import "./WordRow.css";
 
 function WordRow(props) {
 	var row = [];
@@ -15,12 +16,12 @@ function WordRow(props) {
 		);
 	}
 	return (
-		<div className="d-flex justify-content-center my-1">
- 			<h3 style={{ fontSize: "10px" }}>
-				Skill: {Math.round(props.skill * 100) / 100}
+		<div className="cont">
+			<h3 style={{ fontSize: "10px" }}>
+				Skill: {isNaN(props.skill) ? 0 : Math.round(props.skill * 100) / 100}
 			</h3>
 
-			{row}
+			<div className="d-flex justify-content-center my-1">{row}</div>
 		</div>
 	);
 }

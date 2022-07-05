@@ -7,14 +7,12 @@ function WordBox(props) {
 		return str.length === 1 && str.match(/[a-z]/i);
 	}
 	return (
-		<p
+		<div
 			className={classNames(
 				"lighter-border",
 				"rounded-sm",
-				"py-3",
-				"px-4",
-				"mx-1",
-				"p3",
+				"word-box-container",
+				"wordBox",
 				{ "bg-color-green": props.color === "g" },
 				{ "bg-color-yellow": props.color === "y" },
 				{ "bg-color-grey": props.color === "r" || props.color === "" },
@@ -25,8 +23,8 @@ function WordBox(props) {
 				{ "computing-animation": props.animate }
 			)}
 		>
-			{isLetter(props.value) ? props.value : " "}
-		</p>
+			<p className="p3">{isLetter(props.value) ? props.value : " "}</p>
+		</div>
 	);
 }
 export default WordBox;

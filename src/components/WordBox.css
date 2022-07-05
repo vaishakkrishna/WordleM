@@ -1,8 +1,19 @@
 
-.p3 {
-    font-family: "Monaco", "Courier New", monospace;
-    font-size: 30;
-  }
+.word-box-container{
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  margin-top: 1px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 1px;
+}
+.p3{
+  margin-bottom: 0rem;
+}
 
 .lighter-border {
   border: rgb(99, 99, 99) solid 2px;
