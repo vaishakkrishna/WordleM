@@ -82,7 +82,11 @@ function getPatternDistribution(word, solutionSet){
     
 }
 
-function patternOfWordGivenSolution(word, solution){
+export function patternOfWordGivenSolution(word, solution){
+    //check for empty word
+    if (word.length === 0){
+        return "";
+    }
     //initialize solution, word, and result
     solution = solution.split("");
     word = word.split("");

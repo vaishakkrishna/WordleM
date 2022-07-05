@@ -9,14 +9,19 @@ import {
 	getColorsFromGuess,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
+
 import { allWordsList, allSolutionsList } from "../utilities/wordLists";
-import { produceGuess, getEntropy } from "../utilities/solverUtils";
+import {
+	patternOfWordGivenSolution,
+	getEntropy,
+} from "../utilities/solverUtils";
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
 
 function Grid(props) {
-	//WebWorker
+	// WebWorker
 	const myWorker = new WorkerBuilder(Worker);
+
 	/**
 	 * STATE VARIABLES
 	 **/
@@ -36,10 +41,13 @@ function Grid(props) {
 	const [backgroundComputing, setBackgroundComputing] = useState(false);
 	//in the form [[solutionSet, rowToCalculate]...]
 	const [workerStack, setWorkerStack] = useState([]);
+	const [solution, setSolution] = useState(
+		props.type === "freeplay" ? randomElementFromArray(allSolutionsList) : null
+	);
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["CRANE", 5.37, 1.23],
+		["CRANE", 5.37, 0],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -73,57 +81,64 @@ function Grid(props) {
 	// Fills in colors of the previous row when it was completed
 	const updateCompletedRow = () => {
 		const newColorRows = JSON.parse(JSON.stringify(colorRows));
-		getColorsFromGuess(wordRows[currentActiveWordRow - 1])
-			.then((colors) => {
-				if (colors === "ggggg") {
-					setSolved(true);
-				}
-				newColorRows[currentActiveWordRow - 1] = colors.split("");
-			})
-			.then(() => {
-				// Sets colors of prev. row
-				setColorRows(newColorRows);
+		const updateFunction = (colors) => {
+			if (colors === "ggggg") {
+				setSolved(true);
+			}
+			newColorRows[currentActiveWordRow - 1] = colors.split("");
+			// Sets colors of prev. row
+			setColorRows(newColorRows);
 
-				// Computes and sets the new solution set
-				const newSolSet = SolutionSetAfterGuess(
-					solutionSet,
-					wordRows[currentActiveWordRow - 1].join(""),
-					newColorRows[currentActiveWordRow - 1].join("")
-				);
-				console.log(newSolSet);
+			// Computes and sets the new solution set
+			const newSolSet = SolutionSetAfterGuess(
+				solutionSet,
+				wordRows[currentActiveWordRow - 1].join(""),
+				newColorRows[currentActiveWordRow - 1].join("")
+			);
+			console.log(newSolSet);
 
-				// Computes and sets the skill scores
-				const newSkillScores = [...skillScores];
+			// Computes and sets the skill scores
+			const newSkillScores = [...skillScores];
 
-				const bestEntropy = optimalGuesses[currentActiveWordRow - 1][1];
+			const bestEntropy = optimalGuesses[currentActiveWordRow - 1][1];
 
-				const worstEntropy = optimalGuesses[currentActiveWordRow - 1][2];
+			const worstEntropy = optimalGuesses[currentActiveWordRow - 1][2];
 
-				const actualEntropy = getEntropy(
+			const actualEntropy = getEntropy(
+				wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
+				solutionSet
+			);
+			const skillScore =
+				bestEntropy === 0
+					? 100
+					: Math.round(
+							((actualEntropy - worstEntropy) / (bestEntropy - worstEntropy)) *
+								100
+					  );
+			newSkillScores[currentActiveWordRow - 1] = skillScore;
+			setSkillScores(newSkillScores);
+
+			// figure out the next best guess in the background
+			if (optimalGuesses[currentActiveWordRow][0] === "") {
+				console.log("Computing next best guess");
+				const newWS = [...workerStack];
+				newWS.push([newSolSet, currentActiveWordRow]);
+				setWorkerStack(newWS);
+			}
+			setSolutionSet(newSolSet);
+		};
+		if (props.type === "freeplay") {
+			updateFunction(
+				patternOfWordGivenSolution(
 					wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
-					solutionSet
-				);
-				const skillScore =
-					bestEntropy === 0
-						? 100
-						: Math.round(
-								((actualEntropy - worstEntropy) /
-									(bestEntropy - worstEntropy)) *
-									100
-						  );
-				newSkillScores[currentActiveWordRow - 1] = skillScore;
-				setSkillScores(newSkillScores);
-
-				// figure out the next best guess in the background
-				if (optimalGuesses[currentActiveWordRow][0] === "") {
-					console.log("Computing next best guess");
-					const newWS = [...workerStack];
-					newWS.push([newSolSet, currentActiveWordRow]);
-					setWorkerStack(newWS);
-				}
-				setSolutionSet(newSolSet);
-			})
-			.catch((err) => {});
+					solution
+				).toLowerCase()
+			);
+		} else {
+			getColorsFromGuess(wordRows[currentActiveWordRow - 1])
+				.then((colors) => updateFunction(colors))
+				.catch((err) => {});
+		}
 	};
 
 	const deleteLastLetter = () => {
@@ -264,6 +279,13 @@ function Grid(props) {
 		);
 	}
 
+	/**
+	 * UTILITY FUNCTIONS
+	 */
+	function randomElementFromArray(array) {
+		return array[Math.floor(Math.random() * array.length)];
+	}
+
 	return (
 		<div>
 			{rows}
@@ -273,6 +295,14 @@ function Grid(props) {
 					onClick={handleNextGuessClicked}
 				>
 					Click on me to reveal the best next guess!
+				</Button>
+			)}
+			{props.type === "freeplay" && (
+				<Button
+					className="my-5 justify-content-center btn-danger"
+					onClick={() => window.location.reload()}
+				>
+					Give me a different Word!
 				</Button>
 			)}
 			{solved && (

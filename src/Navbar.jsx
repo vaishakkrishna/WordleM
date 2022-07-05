@@ -11,18 +11,16 @@ function Navbar() {
 						Wordle
 					</Nav.Link>
 				</Nav.Item>
-
 				<Nav.Item>
-					<Nav.Link className="navbar-custom" href="/about">
-            About
+					<Nav.Link className="navbar-custom" href="/Freeplay">
+						Freeplay
 					</Nav.Link>
 				</Nav.Item>
-				{/* 
-        <Nav.Item>
-          <Nav.Link className="navbar-custom" href="/Solver">
-            Solver
-          </Nav.Link>
-        </Nav.Item> */}
+				<Nav.Item>
+					<Nav.Link className="navbar-custom" href="/about">
+						About
+					</Nav.Link>
+				</Nav.Item>
 
 				{/* <Nav.Item>
           <Nav.Link className="navbar-custom" href="/Scorer">
