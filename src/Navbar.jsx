@@ -7,7 +7,7 @@ function MyNavbar() {
 	return (
 		<Navbar bg="dark" variant="dark">
 			<Container className="my-2">
-				<Navbar.Brand href="/">Navbar</Navbar.Brand>
+				<Navbar.Brand href="/">Home</Navbar.Brand>
 				<Nav className="me-auto">
 					<Nav.Link href="/">Wordle</Nav.Link>
 					<Nav.Link href="/freeplay">Freeplay</Nav.Link>

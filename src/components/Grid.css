@@ -1,7 +1,8 @@
 .container {
     margin-top: 100px;
-    display: flex;
+    display: inline;
     justify-content: center;
+    align-items: center;
   }
  
   .text-input {

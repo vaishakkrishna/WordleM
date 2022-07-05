@@ -288,7 +288,8 @@ function Grid(props) {
 
 	return (
 		<div>
-			{rows}
+			<div className="container">{rows}</div>
+
 			{props.type === "helper" && (
 				<Button
 					className="my-5 justify-content-center btn-success"

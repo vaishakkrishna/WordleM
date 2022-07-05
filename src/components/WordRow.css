@@ -1,4 +1,24 @@
 .cont{
+    display: flex;
+    flex-direction: row;    
+    justify-content: center;
+    align-items: center;
+
+}
+.cont > * {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.row{
+    margin-right: 5rem;
+    align-items: center;
+    justify-self: flex-end;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+.skill{
+    width: 5rem;
     margin-top: 0;
     margin-bottom: 0;
 }

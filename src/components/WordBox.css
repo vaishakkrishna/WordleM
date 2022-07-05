@@ -1,11 +1,10 @@
 
 .word-box-container{
-  display: flex;
-  
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
-  width: 60px;
+  height: 4rem;
+  width: 4rem;
   margin-top: 1px;
   margin-left: 2px;
   margin-right: 2px;
@@ -13,6 +12,9 @@
 }
 .p3{
   margin-bottom: 0rem;
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: bold;
+  font-size: large;
 }
 
 .lighter-border {
