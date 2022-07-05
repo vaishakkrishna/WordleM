@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/WordleWizard-client/static/css/main.e7268cd8.css",
+    "main.js": "/WordleWizard-client/static/js/main.29377e7c.js",
+    "index.html": "/WordleWizard-client/index.html",
+    "main.e7268cd8.css.map": "/WordleWizard-client/static/css/main.e7268cd8.css.map",
+    "main.29377e7c.js.map": "/WordleWizard-client/static/js/main.29377e7c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e7268cd8.css",
+    "static/js/main.29377e7c.js"
+  ]
+}
