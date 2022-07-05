@@ -1,5 +1,8 @@
-.navbar-custom{
-    background-color: wheat;
-    color: black
+.navbar-custom {
+    margin-top: 0%;
+    height: 20px;
 }
 
+.container{
+    margin: 0%;
+}
