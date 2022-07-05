@@ -289,41 +289,42 @@ function Grid(props) {
 	return (
 		<div>
 			<div className="container">{rows}</div>
-
-			{props.type === "helper" && (
-				<Button
-					className="my-5 justify-content-center btn-success"
-					onClick={handleNextGuessClicked}
-				>
-					Click on me to reveal the best next guess!
-				</Button>
-			)}
-			{props.type === "freeplay" && (
-				<Button
-					className="my-5 justify-content-center btn-danger"
-					onClick={() => window.location.reload()}
-				>
-					Give me a different Word!
-				</Button>
-			)}
-			{solved && (
-				<Button
-					className="my-5 justify-content-center btn-primary"
-					onClick={handleShareClicked}
-				>
-					Share your grid!
-				</Button>
-			)}
-			{syncWithWordle && (
-				<div className="align-content-center">
-					<iframe
-						src="https://www.nytimes.com/games/wordle/index.html"
-						height="400px"
-						width="400px"
-					/>
-				</div>
-			)}
-			{backgroundComputing && <p>Computing, please wait</p>}
+			<div className="buttons">
+				{props.type === "helper" && (
+					<Button
+						className="my-5 justify-content-center btn-success"
+						onClick={handleNextGuessClicked}
+					>
+						Click on me to reveal the best next guess!
+					</Button>
+				)}
+				{props.type === "freeplay" && (
+					<Button
+						className="my-5 justify-content-center btn-danger"
+						onClick={() => window.location.reload()}
+					>
+						Give me a different Word!
+					</Button>
+				)}
+				{solved && (
+					<Button
+						className="my-5 justify-content-center btn-primary"
+						onClick={handleShareClicked}
+					>
+						Share your grid!
+					</Button>
+				)}
+				{syncWithWordle && (
+					<div className="align-content-center">
+						<iframe
+							src="https://www.nytimes.com/games/wordle/index.html"
+							height="400px"
+							width="400px"
+						/>
+					</div>
+				)}
+				{backgroundComputing && <p>Computing, please wait</p>}
+			</div>
 		</div>
 	);
 }

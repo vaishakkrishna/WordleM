@@ -1,5 +1,15 @@
 .center {
     text-align: center;
-
-
   }
+
+.home{
+  margin: 5rem;
+}
+
+.buttons{
+  margin-top: 1rem;
+}
+
+.buttons > * {
+  margin: 1rem;
+}
