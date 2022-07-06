@@ -6,7 +6,6 @@ import {
 	isAlphabetic,
 	generateEmptyBoard,
 	isValidWord,
-	getColorsFromGuess,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
 
@@ -17,6 +16,7 @@ import {
 } from "../utilities/solverUtils";
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
+import { getSolutionFromOffset } from "../utilities/gameStateUtils";
 
 function Grid(props) {
 	// WebWorker
@@ -42,12 +42,14 @@ function Grid(props) {
 	//in the form [[solutionSet, rowToCalculate]...]
 	const [workerStack, setWorkerStack] = useState([]);
 	const [solution, setSolution] = useState(
-		props.type === "freeplay" ? randomElementFromArray(allSolutionsList) : null
+		props.type === "freeplay"
+			? randomElementFromArray(allSolutionsList)
+			: getSolutionFromOffset()
 	);
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["CRANE", 5.37, 0],
+		["TRACE", 5.75, 0],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -127,18 +129,9 @@ function Grid(props) {
 			}
 			setSolutionSet(newSolSet);
 		};
-		if (props.type === "freeplay") {
-			updateFunction(
-				patternOfWordGivenSolution(
-					wordRows[currentActiveWordRow - 1].join("").toLowerCase(),
-					solution
-				).toLowerCase()
-			);
-		} else {
-			getColorsFromGuess(wordRows[currentActiveWordRow - 1])
-				.then((colors) => updateFunction(colors))
-				.catch((err) => {});
-		}
+		const word = wordRows[currentActiveWordRow - 1].join("").toLowerCase();
+		const colors = patternOfWordGivenSolution(word, solution).toLowerCase();
+		updateFunction(colors);
 	};
 
 	const deleteLastLetter = () => {

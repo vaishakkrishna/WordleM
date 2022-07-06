@@ -83,6 +83,7 @@ function getPatternDistribution(word, solutionSet){
 }
 
 export function patternOfWordGivenSolution(word, solution){
+
     //check for empty word
     if (word.length === 0){
         return "";
