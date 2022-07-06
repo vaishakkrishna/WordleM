@@ -1,6 +1,7 @@
-.container {
-    margin-top: 100px;
-    display: inline;
+.grid-container {
+  
+    display: inline-flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
   }

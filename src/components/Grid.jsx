@@ -280,8 +280,8 @@ function Grid(props) {
 	}
 
 	return (
-		<div>
-			<div className="container">{rows}</div>
+		<div className="center">
+			<div className="grid-container">{rows}</div>
 			<div className="buttons">
 				{props.type === "helper" && (
 					<Button
