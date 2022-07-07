@@ -25,9 +25,9 @@
     grid-template-rows: repeat(6, 1fr);
     justify-content: center;
     align-items: center;
-    position: relative;
+    vertical-align: middle;
+    
     gap: 3px;
-    right: 2rem;
   }
  
   .text-input {

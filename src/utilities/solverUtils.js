@@ -115,6 +115,7 @@ export function patternOfWordGivenSolution(word, solution){
 
             if (solution.includes(word[i]) && frequencies[word[i]] > 0){
                 result[i] = "y";
+                frequencies[word[i]] -= 1;
             }
             else if (result[i] === "x") {
                 result[i] = "r";

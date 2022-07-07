@@ -11,9 +11,9 @@
 
 .row{
     display: grid;
-    grid-template-columns: repeat(6, 2fr);
+    grid-template-columns: repeat(5, 2fr);
     column-gap: 3px;
-    justify-content: baselinee;
+    justify-content: center;
 }
 .skill{
     text-align: end;

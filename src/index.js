@@ -10,7 +10,7 @@ import Freeplay from "./pages/Freeplay";
 
 export default function App() {
   return (
-    <div>
+    <div className="base">
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout/>}>
