@@ -51,7 +51,17 @@
   background: #0f0f0f;
 
 }
+.hg-theme-default .hg-button{
+  height: 60px;
+  font-family: inherit;
+  font-weight: bold;
+}
 .hg-button{
+  padding: 0.5rem;
+  
   color: #000000;
 
+}
+.hg-standardBtn{
+  background: grey;
 }
