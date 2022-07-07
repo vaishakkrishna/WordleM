@@ -1,7 +1,9 @@
 .grid-container {
   display: flex;
+  flex-grow: 1;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
 }
 
 /* .skills-container {
@@ -20,13 +22,10 @@
 
 } */
 .grid{
-  
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    justify-content: center;
-    align-items: center;
-    vertical-align: middle;
-    
+    width: 350px;
+    height: 450px;
     gap: 3px;
   }
  

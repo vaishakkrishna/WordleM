@@ -1,16 +1,23 @@
 
 .word-box-container{
 display: block;
+width: 100%;
+height: 100%;
 
 }
 .word-box{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   vertical-align: middle;
+  width: 100%;
+  height: 100%;
   font-size: 2rem;
-  padding: 1rem;
+
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: bold;
   font-size: large;
-  width: 100%;
+
 }
 
 .lighter-border {

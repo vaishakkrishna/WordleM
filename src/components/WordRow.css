@@ -1,17 +1,13 @@
-.cont{
-    display: inline-flex;
-    flex-direction: row;    
-    justify-content: center;
-    align-items: center;
-}
-.cont > * {
-    margin-top: 0;
-    margin-bottom: 0;
-}
+
 
 .row{
     display: grid;
-    grid-template-columns: repeat(5, 2fr);
+    grid-template-columns: repeat(5, 20%);
+    justify-content: space-between;
+    min-width: 100%;
+    min-height: 100%;
+    margin-left: 0;
+    margin-right: 0;
     column-gap: 3px;
     justify-content: center;
 }
