@@ -39,3 +39,19 @@
 .buttons{
   margin: 1rem;  
 }
+
+
+
+.board{
+  margin: auto;
+  max-width: 500px;
+}
+
+.hg-theme-default{
+  background: #0f0f0f;
+
+}
+.hg-button{
+  color: #000000;
+
+}

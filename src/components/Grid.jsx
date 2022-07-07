@@ -17,6 +17,10 @@ import {
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
 import { getSolutionFromOffset } from "../utilities/gameStateUtils";
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
+import { useRef } from "react";
+import { condensedLayout } from "../assets/keyboardLayouts";
 
 function Grid(props) {
 	// WebWorker
@@ -25,6 +29,8 @@ function Grid(props) {
 	/**
 	 * STATE VARIABLES
 	 **/
+	const keyboard = useRef();
+
 	const [currentActiveWordRow, setCurrentActiveWordRow] = useState(0);
 	const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
 	const [wordRows, setWordRows] = useState(
@@ -187,25 +193,35 @@ function Grid(props) {
 		navigator.clipboard.writeText(shareText);
 	}
 
-	// Handle Key presses
-	const keyDownHandler = (event) => {
+	/**
+	 *
+	 * INPUT HANDLING FUNCTIONS
+	 */
+	const keyDownHandler = (input, isString = false) => {
+		var key;
+		if (isString) {
+			key = input === "⌫" ? "Backspace" : input;
+		} else {
+			key = input.key;
+		}
+
 		if (!solved) {
 			// check if the key is backspace
-			if (event.key === "Backspace") {
+			if (key === "Backspace") {
 				deleteLastLetter();
 			} else if (
 				//check if a letter is entered
 				!isComputing &&
-				isAlphabetic(event.key) &&
+				isAlphabetic(key) &&
 				currentActiveLetter < 5 &&
-				event.key.length === 1
+				key.length === 1
 			) {
-				const letter = event.key;
+				const letter = key;
 				fillInLetter(letter);
 				// check if Row is completed
 			} else if (
 				!backgroundComputing &&
-				event.key === "Enter" &&
+				key === "Enter" &&
 				currentActiveLetter === 5 &&
 				currentActiveWordRow < 6 &&
 				isValidWord(wordRows[currentActiveWordRow])
@@ -214,6 +230,11 @@ function Grid(props) {
 				setCurrentActiveWordRow(currentActiveWordRow + 1);
 			}
 		}
+	};
+
+	const onKeyPress = (button) => {
+		console.log("Button pressed", button);
+		keyDownHandler(button, true);
 	};
 
 	/**
@@ -288,7 +309,6 @@ function Grid(props) {
 	return (
 		<div className="center">
 			<div className="grid-container">
-
 				<div className="grid">{rows}</div>
 			</div>
 			<div className="buttons">
@@ -326,6 +346,15 @@ function Grid(props) {
 					</div>
 				)}
 				{backgroundComputing && <p>Computing, please wait</p>}
+			</div>
+			<div className="board">
+				<Keyboard
+					keyboardRef={(r) => (keyboard.current = r)}
+					layout={condensedLayout}
+					layoutName="default"
+					onKeyPress={onKeyPress}
+					theme="hg-theme-default hg-button"
+				/>
 			</div>
 		</div>
 	);
