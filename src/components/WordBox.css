@@ -4,9 +4,6 @@ display: block;
 
 }
 .word-box{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   vertical-align: middle;
   font-size: 2rem;
   padding: 1rem;
