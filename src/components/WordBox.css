@@ -1,20 +1,19 @@
 
 .word-box-container{
+display: block;
+
+}
+.word-box{
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 4rem;
-  width: 4rem;
-  margin-top: 2px;
-  margin-left: 2px;
-  margin-right: 2px;
-  margin-bottom: 2px;
-}
-.p3{
-  margin-bottom: 0rem;
+  vertical-align: middle;
+  font-size: 2rem;
+  padding: 1rem;
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: bold;
   font-size: large;
+  width: 100%;
 }
 
 .lighter-border {

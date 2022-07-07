@@ -259,6 +259,7 @@ function Grid(props) {
 	}, [optimalGuesses, isComputing]);
 
 	var rows = [];
+	var skills = [];
 
 	for (var i = 0; i < 6; i++) {
 		rows.push(
@@ -269,6 +270,11 @@ function Grid(props) {
 				animate={isComputing && i === currentActiveWordRow}
 				skill={skillScores[i]}
 			/>
+		);
+		skills.push(
+			<div key={i} className="skills">
+				{skillScores[i] > 0 ? "Skill: " + skillScores[i] : ""}
+			</div>
 		);
 	}
 
@@ -281,7 +287,10 @@ function Grid(props) {
 
 	return (
 		<div className="center">
-			<div className="grid-container">{rows}</div>
+			<div className="grid-container">
+
+				<div className="grid">{rows}</div>
+			</div>
 			<div className="buttons">
 				{props.type === "helper" && (
 					<Button

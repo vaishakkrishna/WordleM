@@ -1,10 +1,32 @@
 .grid-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .skills-container {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  flex-flow: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+.skills{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+} */
+.grid{
   
-    display: inline-flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
     justify-content: center;
     align-items: center;
     position: relative;
+    gap: 3px;
     right: 3rem;
   }
  
