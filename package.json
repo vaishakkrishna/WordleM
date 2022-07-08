@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "rewire": "^6.0.0",
     "worker-loader": "^3.0.8"
   }
 }

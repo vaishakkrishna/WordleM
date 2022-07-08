@@ -1,7 +1,9 @@
+/* eslint-disable */
 //worker.js
-// eslint-disable-next-line import/no-anonymous-default-export
+
+
 export default () => {
-    // eslint-disable-next-line no-restricted-globals
+
     self.onmessage = (message) => {
       
       const solutionSet = message.data[0];
@@ -80,8 +82,8 @@ function getPatternDistribution(word, solutionSet) {
     // loop through words in solution set, produce a pattern with the given word, and add to the distribution
     let patternDist = {};
     const individualProbability = 1/solutionSet.length;
-    for (let solution of solutionSet) {
-
+    for (i = 0; i < solutionSet.length; i++) {
+        var solution = solutionSet[i];
         let pattern = patternOfWordGivenSolution(word, solution);
         
         if (!(pattern in patternDist)){
