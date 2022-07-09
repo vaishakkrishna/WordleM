@@ -353,7 +353,7 @@ function Grid(props) {
 					layout={condensedLayout}
 					layoutName="default"
 					onKeyPress={onKeyPress}
-					theme="hg-theme-default hg-button hg-standardBtn hg-activeButton"
+					theme="hg-theme-default hg-button hg-standardBtn hg-activeButton sticky-bottom"
 				/>
 			</div>
 		</div>

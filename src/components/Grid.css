@@ -26,6 +26,8 @@
     grid-template-rows: repeat(6, 1fr);
     width: 350px;
     height: 450px;
+
+
     gap: 3px;
   }
  
@@ -44,7 +46,14 @@
 
 .board{
   margin: auto;
-  max-width: 500px;
+  max-width: 600px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 0;
+  width: 100%;
+
+  
 }
 
 .hg-theme-default{
