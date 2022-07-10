@@ -201,6 +201,7 @@ function Grid(props) {
 		var key;
 		if (isString) {
 			key = input === "⌫" ? "Backspace" : input;
+			key = input === "ENTER" ? "Enter" : key;
 		} else {
 			key = input.key;
 		}
