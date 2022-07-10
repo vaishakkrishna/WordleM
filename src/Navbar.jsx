@@ -5,10 +5,9 @@ import { Container, Navbar } from "react-bootstrap";
 
 function MyNavbar() {
 	return (
-		<Navbar bg="dark" variant="dark">
+		<Navbar bg="dark" variant="dark" className="my-nav">
 			<Container className="my-2">
-				<Navbar.Brand href="/">Home</Navbar.Brand>
-				
+				<Navbar.Brand href="/">Better Wordle.</Navbar.Brand>
 				<Nav className="me-auto">
 					<Nav.Link href="/">Wordle</Nav.Link>
 					<Nav.Link href="/freeplay">Freeplay</Nav.Link>

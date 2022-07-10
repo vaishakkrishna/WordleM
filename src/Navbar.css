@@ -1,12 +1,5 @@
-.navbar-custom {
-    margin-top: 0%;
-    height: 20px;
 
-}
-
-.navcontainer{
-    display: flex;
-    margin: 0%;
-    margin-left: 5rem;
-
+.my-nav{
+    font-family:Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
+    font-weight: bold;
 }

@@ -1,6 +1,7 @@
 .grid-container {
   display: flex;
   flex-grow: 1;
+  margin-top: 1rem;
   justify-content: center;
   align-items: center;
   padding: 1rem;
@@ -57,7 +58,7 @@
 }
 
 .hg-theme-default{
-  background: #0f0f0f;
+  background-color: none;
 
 }
 .hg-theme-default .hg-button{
@@ -67,10 +68,6 @@
 }
 .hg-button{
   padding: 0.5rem;
-  
   color: #000000;
+}
 
-}
-.hg-standardBtn{
-  background: grey;
-}
