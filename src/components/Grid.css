@@ -53,13 +53,13 @@
   transform: translate(-50%, 0);
   bottom: 0;
   width: 100%;
-
-  
 }
 
-.hg-theme-default{
-  background-color: none;
-
+.custom-keyboard{
+  background-color: transparent;
+}
+.myTheme.hg-theme-default{
+  background-color: #212529;
 }
 .hg-theme-default .hg-button{
   height: 60px;

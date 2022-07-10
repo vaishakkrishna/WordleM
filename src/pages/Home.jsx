@@ -4,14 +4,14 @@ import "./styles.css";
 function Home() {
 	return (
 		<div className="home">
-			<div className="container">
-				<div className="col-lg-5">
+
+				<div className="col-lg-5 ">
 					<h1 className="font-weight-heavy title">Better Wordle.</h1>
 					<p className="description">
 						This is a Wordle client + solver that gives you more
 						customizatability and control over your Wordle Experience. See how
 						well you did by toggling the skill button, or even sync with the
-						Wordle website and keep track of progress on both.
+						Wordle website and keep track of progress on both (features coming soon).
 					</p>
 				</div>
 				<div className="buttons">
@@ -22,7 +22,7 @@ function Home() {
 						Freeplay
 					</Button>
 				</div>
-			</div>
+
 		</div>
 	);
 }

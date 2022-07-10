@@ -308,6 +308,9 @@ function Grid(props) {
 
 	return (
 		<div className="center">
+			<div className="center mt-5" style={{ fontSize: "x-small" }}>
+				(Scroll for more options)
+			</div>
 			<div className="grid-container">
 				<div className="grid">{rows}</div>
 			</div>
@@ -353,7 +356,7 @@ function Grid(props) {
 					layout={condensedLayout}
 					layoutName="default"
 					onKeyPress={onKeyPress}
-					theme="hg-theme-default hg-button hg-standardBtn hg-activeButton sticky-bottom"
+					theme="hg-theme-default myTheme"
 				/>
 			</div>
 		</div>

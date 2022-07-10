@@ -5,9 +5,7 @@ const Layout = () => {
 	return (
 		<div>
 			<MyNavbar/>
-			<div className="center mt-5" style={{fontSize: 'x-small'}} >
-				(Scroll for more options)
-			</div>
+			
 			<Outlet />
 			
 		</div>

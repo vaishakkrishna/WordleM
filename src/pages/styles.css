@@ -12,7 +12,9 @@
 }
 
 .home{
-  margin: 5rem;
+  margin-left: 2rem;
+  margin-top: 3rem;
+  max-width: 500px;
 }
 
 .buttons{
@@ -25,4 +27,8 @@
 
 @media all and (max-height: 500px) {
   .title { display: none; }
+}
+
+.description{
+
 }
