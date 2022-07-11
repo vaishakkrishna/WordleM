@@ -1,3 +1,6 @@
+/**
+ * IMPORTS
+ */
 import WordRow from "./WordRow";
 import "./Grid.css";
 import React, { useEffect, useState } from "react";
@@ -8,7 +11,6 @@ import {
 	isValidWord,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
-
 import { allWordsList, allSolutionsList } from "../utilities/wordLists";
 import {
 	patternOfWordGivenSolution,
@@ -21,16 +23,19 @@ import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useRef } from "react";
 import { condensedLayout } from "../assets/keyboardLayouts";
+import { checkboxes, getCheckboxStates } from "../assets/checkboxes";
 
+/**
+ * GRID COMPONENT START
+ */
 function Grid(props) {
-	// WebWorker
+	// Web Worker for background computation
 	const myWorker = new WorkerBuilder(Worker);
 
 	/**
 	 * STATE VARIABLES
 	 **/
 	const keyboard = useRef();
-
 	const [currentActiveWordRow, setCurrentActiveWordRow] = useState(0);
 	const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
 	const [wordRows, setWordRows] = useState(
@@ -47,11 +52,18 @@ function Grid(props) {
 	const [backgroundComputing, setBackgroundComputing] = useState(false);
 	//in the form [[solutionSet, rowToCalculate]...]
 	const [workerStack, setWorkerStack] = useState([]);
+	// Solution to the game
 	const [solution, setSolution] = useState(
 		props.type === "freeplay"
 			? randomElementFromArray(allSolutionsList)
 			: getSolutionFromOffset()
 	);
+
+	// State of the checkboxes
+	const [checkboxStates, setCheckboxStates] = useState(
+		getCheckboxStates(checkboxes)
+	);
+
 	//check if user uses all the guesses
 	const [guessesDepleted, setGuessesDepleted] = useState(false);
 
@@ -155,49 +167,11 @@ function Grid(props) {
 		}
 	};
 
-	//Handle button presses for next guess
-	function handleNextGuessClicked(e) {
-		if (solved) {
-			alert("You have already solved this puzzle!");
-			return;
-		}
-		if (isComputing) {
-			alert("Please wait for the solver to finish computing!");
-			return;
-		}
-		// Worker has computed the next best guess
-		if (optimalGuesses[currentActiveWordRow][0] !== "") {
-			// fill in word
-			console.log(optimalGuesses[currentActiveWordRow[0]]);
-			fillInWord(optimalGuesses[currentActiveWordRow][0]);
-			return;
-		}
-		// Worker is computing the next best guess
-		setIsComputing(true);
-	}
-
-	function handleShareClicked(e) {
-		var shareText = "Wordle 001: " + currentActiveWordRow.toString() + "/6\n";
-		for (var i = 0; i < colorRows.length; i++) {
-			for (var j = 0; j < colorRows[i].length; j++) {
-				switch (colorRows[i][j]) {
-					case "g":
-						shareText += "🟩";
-						break;
-					case "r":
-						shareText += "⬜️";
-						break;
-					case "y":
-						shareText += "🟨";
-						break;
-					default:
-						shareText += "";
-				}
-			}
-			shareText += "\n";
-		}
-		navigator.share(shareText);
-		navigator.clipboard.writeText(shareText);
+	/**
+	 * UTILITY FUNCTIONS
+	 */
+	function randomElementFromArray(array) {
+		return array[Math.floor(Math.random() * array.length)];
 	}
 
 	/**
@@ -245,21 +219,70 @@ function Grid(props) {
 		keyDownHandler(button, true);
 	};
 
+	//Handle button presses for next guess
+	function handleNextGuessClicked(e) {
+		if (solved) {
+			alert("You have already solved this puzzle!");
+			return;
+		}
+		if (isComputing) {
+			alert("Please wait for the solver to finish computing!");
+			return;
+		}
+		// Worker has computed the next best guess
+		if (optimalGuesses[currentActiveWordRow][0] !== "") {
+			// fill in word
+			console.log(optimalGuesses[currentActiveWordRow[0]]);
+			fillInWord(optimalGuesses[currentActiveWordRow][0]);
+			return;
+		}
+		// Worker is computing the next best guess
+		setIsComputing(true);
+	}
+
+	// Share button handler
+	function handleShareClicked(e) {
+		var shareText = "Wordle 001: " + currentActiveWordRow.toString() + "/6\n";
+		for (var i = 0; i < colorRows.length; i++) {
+			for (var j = 0; j < colorRows[i].length; j++) {
+				switch (colorRows[i][j]) {
+					case "g":
+						shareText += "🟩";
+						break;
+					case "r":
+						shareText += "⬜️";
+						break;
+					case "y":
+						shareText += "🟨";
+						break;
+					default:
+						shareText += "";
+				}
+			}
+			shareText += "\n";
+		}
+		navigator.share(shareText);
+		navigator.clipboard.writeText(shareText);
+	}
+
+	//handles changing of a checkbox
+	const handleCheckboxChange = (boxName) => {
+		const newCheckboxStates = { ...checkboxStates };
+		newCheckboxStates[boxName] = !newCheckboxStates[boxName];
+		setCheckboxStates(newCheckboxStates);
+		localStorage.setItem(boxName, newCheckboxStates[boxName]);
+		console.log(boxName);
+	};
+
 	/**
 	 *
 	 * SECTION FOR HOOKS
 	 *
 	 */
-	useEffect(() => {
-		if (currentActiveWordRow > 0 && currentActiveWordRow < 7) {
-			updateCompletedRow();
-			if (currentActiveWordRow === 6) {
-				setGuessesDepleted(true);
-			}
-		}
-	}, [currentActiveWordRow]);
 
+	//Hook on startup
 	useEffect(() => {
+		// Event listener for keyboard events
 		document.addEventListener("keydown", keyDownHandler);
 
 		//recieve result from worker
@@ -270,12 +293,27 @@ function Grid(props) {
 			console.log(newOptimalGuesses);
 			setBackgroundComputing(false);
 		};
+		// instantiate checkBoxes if they don't exist
+		if (localStorage.getItem("checkbox_1") === null) {
+			localStorage.setItem("checkbox_1", false);
+		}
 
 		return function cleanup() {
 			document.removeEventListener("keydown", keyDownHandler);
 		};
 	});
 
+	// Update state of the game when a guess is entered
+	useEffect(() => {
+		if (currentActiveWordRow > 0 && currentActiveWordRow < 7) {
+			updateCompletedRow();
+			if (currentActiveWordRow === 6) {
+				setGuessesDepleted(true);
+			}
+		}
+	}, [currentActiveWordRow]);
+
+	// Add a task to the worker
 	useEffect(() => {
 		if (workerStack.length > 0) {
 			myWorker.postMessage(workerStack.pop());
@@ -283,6 +321,7 @@ function Grid(props) {
 		}
 	}, [workerStack]);
 
+	// Update ability to enter letters or fill in guess if needed
 	useEffect(() => {
 		if (isComputing && optimalGuesses[currentActiveWordRow][0] !== "") {
 			fillInWord(optimalGuesses[currentActiveWordRow][0]);
@@ -290,6 +329,12 @@ function Grid(props) {
 		}
 	}, [optimalGuesses, isComputing]);
 
+	/**
+	 *
+	 *
+	 * Render the grid and all related components
+	 *
+	 */
 	var rows = [];
 	var skills = [];
 
@@ -308,13 +353,6 @@ function Grid(props) {
 				{skillScores[i] > 0 ? "Skill: " + skillScores[i] : ""}
 			</div>
 		);
-	}
-
-	/**
-	 * UTILITY FUNCTIONS
-	 */
-	function randomElementFromArray(array) {
-		return array[Math.floor(Math.random() * array.length)];
 	}
 
 	return (
@@ -341,7 +379,7 @@ function Grid(props) {
 			</div>
 
 			<div className="buttons">
-				{props.type === "helper" && (
+				{checkboxStates["Show Solver Assistant"] && (
 					<Button
 						className="my-5 justify-content-center btn-success"
 						onClick={handleNextGuessClicked}
@@ -375,6 +413,20 @@ function Grid(props) {
 					</div>
 				)}
 				{backgroundComputing && <p>Computing, please wait</p>}
+			</div>
+
+			<div className="options">
+				{checkboxes.map((elem) => (
+					<label key={elem}>
+						<input
+							type="checkbox"
+							checked={checkboxStates[elem]}
+							onChange={() => handleCheckboxChange(elem)}
+							key="elem"
+						/>
+						{elem}
+					</label>
+				))}
 			</div>
 
 			<div className="board">

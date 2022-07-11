@@ -67,12 +67,15 @@
   animation: fadeOut ease 5s forwards;
 
 }
-@keyframes fadeOut {
-  0% {opacity: 0.9;}
-  50% {opacity: 0.9;}
-  100% {opacity: 0;} 
-} 
 
+/* Options Formatting */
+.options{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+/* Keyboard Formatting */ 
 .custom-keyboard{
   background-color: transparent;
 }
@@ -89,3 +92,8 @@
   color: #000000;
 }
 
+@keyframes fadeOut {
+  0% {opacity: 0.9;}
+  50% {opacity: 0.9;}
+  100% {opacity: 0;} 
+} 

@@ -105,7 +105,7 @@ export function patternOfWordGivenSolution(word, solution){
     }
 
     for (let i = 0; i < word.length; i++){
-        if (solution[i] === word[i]){
+        if (solution[i] === word[i]) {
             result[i] = "g";
             frequencies[solution[i]] -= 1;
         }
@@ -113,7 +113,7 @@ export function patternOfWordGivenSolution(word, solution){
 
     for (let i = 0; i < word.length; i++){
 
-            if (solution.includes(word[i]) && frequencies[word[i]] > 0){
+            if (result[i] !== "g" && solution.includes(word[i]) && frequencies[word[i]] > 0){
                 result[i] = "y";
                 frequencies[word[i]] -= 1;
             }
