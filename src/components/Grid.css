@@ -55,6 +55,24 @@
   width: 100%;
 }
 
+.completion-banner{
+  position: fixed;
+  padding: 2rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-repeat: no-repeat;
+  animation-fill-mode: both;
+  background-color: rgb(100, 100, 100);
+  z-index: 100;
+  animation: fadeOut ease 5s forwards;
+
+}
+@keyframes fadeOut {
+  0% {opacity: 0.9;}
+  50% {opacity: 0.9;}
+  100% {opacity: 0;} 
+} 
+
 .custom-keyboard{
   background-color: transparent;
 }

@@ -14,7 +14,7 @@
 .home{
   margin-left: 2rem;
   margin-top: 3rem;
-  max-width: 500px;
+  max-width: 1000px;
 }
 
 .buttons{
@@ -29,6 +29,3 @@
   .title { display: none; }
 }
 
-.description{
-
-}

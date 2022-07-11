@@ -52,6 +52,8 @@ function Grid(props) {
 			? randomElementFromArray(allSolutionsList)
 			: getSolutionFromOffset()
 	);
+	//check if user uses all the guesses
+	const [guessesDepleted, setGuessesDepleted] = useState(false);
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
@@ -127,7 +129,11 @@ function Grid(props) {
 			setSkillScores(newSkillScores);
 
 			// figure out the next best guess in the background
-			if (optimalGuesses[currentActiveWordRow][0] === "") {
+
+			if (
+				currentActiveWordRow < 6 &&
+				optimalGuesses[currentActiveWordRow][0] === ""
+			) {
 				console.log("Computing next best guess");
 				const newWS = [...workerStack];
 				newWS.push([newSolSet, currentActiveWordRow]);
@@ -190,6 +196,7 @@ function Grid(props) {
 			}
 			shareText += "\n";
 		}
+		navigator.share(shareText);
 		navigator.clipboard.writeText(shareText);
 	}
 
@@ -244,8 +251,11 @@ function Grid(props) {
 	 *
 	 */
 	useEffect(() => {
-		if (currentActiveWordRow > 0) {
+		if (currentActiveWordRow > 0 && currentActiveWordRow < 7) {
 			updateCompletedRow();
+			if (currentActiveWordRow === 6) {
+				setGuessesDepleted(true);
+			}
 		}
 	}, [currentActiveWordRow]);
 
@@ -309,12 +319,27 @@ function Grid(props) {
 
 	return (
 		<div className="center">
-			<div className="center mt-5" style={{ fontSize: "x-small" }}>
-				(Scroll for more options)
-			</div>
+			{!guessesDepleted && !solved && (
+				<div className="center" style={{ fontSize: "x-small" }}>
+					(Scroll for more options)
+				</div>
+			)}
+
+			{guessesDepleted && (
+				<div className="completion-banner">
+					Nice Try! Today's word was {solution.toUpperCase()}
+				</div>
+			)}
+			{solved && (
+				<div className="completion-banner">
+					Well Done! Scroll down to share your results!
+				</div>
+			)}
+
 			<div className="grid-container">
 				<div className="grid">{rows}</div>
 			</div>
+
 			<div className="buttons">
 				{props.type === "helper" && (
 					<Button
@@ -351,6 +376,7 @@ function Grid(props) {
 				)}
 				{backgroundComputing && <p>Computing, please wait</p>}
 			</div>
+
 			<div className="board">
 				<Keyboard
 					keyboardRef={(r) => (keyboard.current = r)}
