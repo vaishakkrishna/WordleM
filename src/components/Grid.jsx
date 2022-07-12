@@ -18,7 +18,7 @@ import {
 } from "../utilities/solverUtils";
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
-import { getSolutionFromOffset } from "../utilities/gameStateUtils";
+import { getSolutionFromOffset, getWordRowsFromStorage, getColorRowsFromStorage} from "../utilities/gameStateUtils";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useRef } from "react";
@@ -38,10 +38,10 @@ function Grid(props) {
 	const keyboard = useRef();
 	const [currentActiveWordRow, setCurrentActiveWordRow] = useState(0);
 	const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
-	const [wordRows, setWordRows] = useState(
+	const [wordRows, setWordRows] = useState(getWordRowsFromStorage() ||
 		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
 	);
-	const [colorRows, setColorRows] = useState(
+	const [colorRows, setColorRows] = useState(getColorRowsFromStorage() ||
 		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
 	);
 	const [solved, setSolved] = useState(false);
@@ -69,7 +69,7 @@ function Grid(props) {
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["TRACE", 5.75, 0],
+		["TRACE", 5.88, 0],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -264,9 +264,13 @@ function Grid(props) {
 			}
 			shareText += "\n";
 		}
+		shareText += `Skill: ${
+			skillScores.reduce((a, b) => a + b) / skillScores.length
+		}`;
 		if (navigator.share) {
 			navigator.share({ text: shareText }).catch((error) => {
-			console.log("Share failed")});
+				console.log("Share failed");
+			});
 		} else {
 			setCopied(true);
 			navigator.clipboard.writeText(shareText);

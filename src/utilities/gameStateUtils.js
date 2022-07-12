@@ -17,3 +17,25 @@ function getDayOfTheYear(){
     var day = Math.floor(diff / oneDay);
     return day
 }
+
+// Get the board state for today's wordle from local storage, or generate a new one if it doesn't exist
+export function getWordRowsFromStorage() {
+
+    const wordRows = localStorage.getItem("wordRows");
+    if (wordRows){
+        return JSON.parse(wordRows);
+    }
+    return null;
+}
+
+export function getColorRowsFromStorage() {
+    const wordRows = localStorage.getItem("wordRows");
+    if (wordRows){
+        return JSON.parse(wordRows);
+    }
+    return null;
+}
+
+export function getSkillScoresFromStorage(){
+    
+}
