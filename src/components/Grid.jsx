@@ -265,14 +265,15 @@ function Grid(props) {
 			shareText += "\n";
 		}
 		if (navigator.share) {
-			navigator.share(shareText);
+			navigator.share({ text: shareText }).catch((error) => {
+			console.log("Share failed")});
 		} else {
 			setCopied(true);
 			navigator.clipboard.writeText(shareText);
 		}
 	}
 
-	//handles changing of a checkbox
+	//handles changing of a checkbox, updates the local storage accordingly.
 	const handleCheckboxChange = (boxName) => {
 		const newCheckboxStates = { ...checkboxStates };
 		newCheckboxStates[boxName] = !newCheckboxStates[boxName];
