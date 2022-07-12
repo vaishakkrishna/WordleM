@@ -1,4 +1,4 @@
-export const checkboxes = ["Show Skill", "Show Luck", "Show Solver Assistant"];
+export const checkboxes = ["Show Solver Assistant"];
 
 export const getCheckboxStates = (checkboxes) =>
 {

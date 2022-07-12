@@ -77,6 +77,9 @@ function Grid(props) {
 		["", 0, 0],
 	]);
 
+	//check if share content is copied to clipboard
+	const [copied, setCopied] = useState(false);
+
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -261,8 +264,12 @@ function Grid(props) {
 			}
 			shareText += "\n";
 		}
-		navigator.share(shareText);
-		navigator.clipboard.writeText(shareText);
+		if (navigator.share) {
+			navigator.share(shareText);
+		} else {
+			setCopied(true);
+			navigator.clipboard.writeText(shareText);
+		}
 	}
 
 	//handles changing of a checkbox
@@ -365,7 +372,7 @@ function Grid(props) {
 
 			{guessesDepleted && (
 				<div className="completion-banner">
-					Nice Try! Today's word was {solution.toUpperCase()}
+					Nice Try :( Today's word was {solution.toUpperCase()}
 				</div>
 			)}
 			{solved && (
@@ -373,6 +380,7 @@ function Grid(props) {
 					Well Done! Scroll down to share your results!
 				</div>
 			)}
+			{copied && <div className="completion-banner">Copied to clipboard!</div>}
 
 			<div className="grid-container">
 				<div className="grid">{rows}</div>
