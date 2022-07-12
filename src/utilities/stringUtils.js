@@ -81,7 +81,7 @@ const produceMatchFunc = (guess, colors) =>{
 
       case "Y":
         let index = word.indexOf(guess[i])
-        if (index === -1){
+        if (index === i || index === -1){
           return false;
         }
         word[index] = "_";
