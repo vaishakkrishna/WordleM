@@ -55,7 +55,7 @@ function Grid(props) {
 	// Solution to the game
 	const [solution, setSolution] = useState(
 		props.type === "freeplay"
-			? "surer"
+			? randomElementFromArray(allSolutionsList)
 			: getSolutionFromOffset()
 	);
 
