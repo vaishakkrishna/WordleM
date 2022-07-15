@@ -85,6 +85,9 @@ function Grid(props) {
 	//check if share content is copied to clipboard
 	const [copied, setCopied] = useState(false);
 
+	//check for invalid word input for animation purposes
+	const [invalidWordEntered, setInvalidWordEntered] = useState(false);
+
 	/**
 	 * HELPER FUNCTIONS FOR KEY PRESSES AND API CALLS
 	 **/
@@ -217,11 +220,17 @@ function Grid(props) {
 				!backgroundComputing &&
 				key === "Enter" &&
 				currentActiveLetter === 5 &&
-				currentActiveWordRow < 6 &&
-				isValidWord(wordRows[currentActiveWordRow])
+				currentActiveWordRow < 6
 			) {
-				setCurrentActiveLetter(0);
-				setCurrentActiveWordRow(currentActiveWordRow + 1);
+				if (isValidWord(wordRows[currentActiveWordRow])) {
+					setCurrentActiveLetter(0);
+					setCurrentActiveWordRow(currentActiveWordRow + 1);
+				} else {
+					setInvalidWordEntered(true);
+					setTimeout(() => {
+						setInvalidWordEntered(false);
+					}, 500);
+				}
 			}
 		}
 	};
@@ -358,7 +367,8 @@ function Grid(props) {
 				key={i}
 				wordRowValue={wordRows[i]}
 				colorRowValue={colorRows[i]}
-				animate={isComputing && i === currentActiveWordRow}
+				animateComputation={isComputing && i === currentActiveWordRow}
+				animateInvalidWord={invalidWordEntered && i === currentActiveWordRow}
 				skill={skillScores[i]}
 			/>
 		);
@@ -377,9 +387,7 @@ function Grid(props) {
 				</div>
 			)}
 			{solved && showSolved && (
-				<div className="completion-banner">
-					Well Done! Scroll down to share your results!
-				</div>
+				<div className="completion-banner">Well Done! Share your results!</div>
 			)}
 			{copied && <div className="completion-banner">Copied to clipboard!</div>}
 
@@ -417,7 +425,9 @@ function Grid(props) {
 						/>
 					</div>
 				)}
-				{backgroundComputing && <p>Computing, please wait</p>}
+				{backgroundComputing && currentActiveWordRow < 2 && (
+					<div className="completion-banner">Computing, please wait</div>
+				)}
 			</div>
 			<div className="grid-container">
 				<div className="grid">{rows}</div>

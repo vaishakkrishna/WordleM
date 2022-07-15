@@ -11,7 +11,8 @@ function WordRow(props) {
 				key={i}
 				value={props.wordRowValue[i]}
 				color={props.colorRowValue[i]}
-				animate={props.animate}
+				animateComputing={props.animateComputing}
+				animateInvalidWord={props.animateInvalidWord}
 			/>
 		);
 	}

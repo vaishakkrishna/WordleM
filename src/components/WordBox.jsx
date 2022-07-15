@@ -20,7 +20,8 @@ function WordBox(props) {
 						"flip-animation":
 							props.color === "g" || props.color === "y" || props.color === "r",
 					},
-					{ "computing-animation": props.animate }
+					{ "computing-animation": props.animateComputing },
+					{ "invalid-word-animation": props.animateInvalidWord }
 				)}
 			>
 				{isLetter(props.value) ? props.value : " "}

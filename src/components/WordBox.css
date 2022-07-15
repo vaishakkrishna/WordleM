@@ -44,6 +44,9 @@ height: 100%;
     animation: cycleColor 1s infinite;
 }
 
+.invalid-word-animation{
+    animation: shake 0.5s;
+}
 @keyframes cycleColor {
   0% {
     background-color: #3a3a3c;
@@ -72,5 +75,26 @@ height: 100%;
     100%{
         transform: rotateX(0deg);
     }
+}
+
+@keyframes shake{
+  0%{
+    transform: translate(0px, 0px);
+  }
+  20%{
+    transform: translate(10px, 0px);
+  }
+  40%{
+    transform: translate(-10px, 0px);
+  }
+  60%{
+    transform: translate(10px, 0px);
+  }
+  80%{
+    transform: translate(-10px, 0px);
+  }
+  100%{
+    transform: translate(0px, 0px);
+  }
 }
 
