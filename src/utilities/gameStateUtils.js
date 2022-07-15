@@ -39,3 +39,12 @@ export function getColorRowsFromStorage() {
 export function getSkillScoresFromStorage(){
     
 }
+
+export const getSettingsState = (settings) =>
+{
+    let settingsState = {};
+    settings.map(setting => {
+        return settingsState[setting] = localStorage.getItem(setting) === "true";
+    });
+    return settingsState;
+}

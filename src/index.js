@@ -3,10 +3,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css"
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
-import Helper from "./pages/Helper"
+import PlayView from "./pages/PlayView"
 import ScoreReport from "./pages/ScoreReport";
 import NoPage from "./pages/NoPage";
-import Freeplay from "./pages/Freeplay";
+
 
 export default function App() {
   return (
@@ -14,9 +14,9 @@ export default function App() {
       <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout/>}>
-          <Route index element={<Helper/>} />
+          <Route index element={<PlayView type="default"/>} />
           <Route path="about" element={<Home/>} />
-          <Route path="freeplay" element={<Freeplay/>} />
+          <Route path="freeplay" element={<PlayView type="freeplay"/>} />
           <Route path="ScoreReport" element={<ScoreReport/>} />
           <Route path="*" element={<NoPage />} />
         </Route>

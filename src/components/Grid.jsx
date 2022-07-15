@@ -11,7 +11,7 @@ import {
 	isValidWord,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
-import {allSolutionsList } from "../utilities/wordLists";
+import { allSolutionsList } from "../utilities/wordLists";
 import {
 	patternOfWordGivenSolution,
 	getEntropy,
@@ -64,11 +64,6 @@ function Grid(props) {
 		props.type === "freeplay"
 			? randomElementFromArray(allSolutionsList)
 			: getSolutionFromOffset()
-	);
-
-	// State of the checkboxes
-	const [checkboxStates, setCheckboxStates] = useState(
-		getCheckboxStates(checkboxes)
 	);
 
 	//check if user uses all the guesses
@@ -272,7 +267,9 @@ function Grid(props) {
 			shareText += "\n";
 		}
 		shareText += `Skill: ${
-			Math.round((skillScores.reduce((a, b) => a + b) / skillScores.length)*100)/100
+			Math.round(
+				(skillScores.reduce((a, b) => a + b) / skillScores.length) * 100
+			) / 100
 		}`;
 		if (navigator.share) {
 			navigator.share({ text: shareText }).catch((error) => {
@@ -303,10 +300,6 @@ function Grid(props) {
 			console.log(newOptimalGuesses);
 			setBackgroundComputing(false);
 		};
-		// instantiate checkBoxes if they don't exist
-		if (localStorage.getItem("checkbox_1") === null) {
-			localStorage.setItem("checkbox_1", false);
-		}
 
 		return function cleanup() {
 			document.removeEventListener("keydown", keyDownHandler);
@@ -390,7 +383,7 @@ function Grid(props) {
 			</div>
 
 			<div className="buttons">
-				{checkboxStates["Show Solver Assistant"] && (
+				{props.settingsState["Show Solver Assistant"] && (
 					<Button
 						className="justify-content-center btn-success"
 						onClick={handleNextGuessClicked}
