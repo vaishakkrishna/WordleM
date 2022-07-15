@@ -13,15 +13,17 @@ const Layout = () => {
 			<MyNavbar />
 			<Button
 				className="settings-icon btn-secondary"
-				onClick={(e) => setShowSettings(true)}
+				onClick={(e) => setShowSettings(!showSettings)}
 			>
 				⚙
 			</Button>
 			{
-				showSettings && <Settings />
+				showSettings && (<Settings />)
 			}
 			
 			<Outlet />
+
+			
 		</div>
 	);
 };
