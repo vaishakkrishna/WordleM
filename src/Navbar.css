@@ -1,6 +1,17 @@
+@media only screen and (max-width: 425px) {
+    .full-title {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 424px) {
+    .small-title {
+        display: none;
+    }
+}
 
 .my-nav{
     font-family:Avantgarde, TeX Gyre Adventor, URW Gothic L, sans-serif;
     font-weight: bold;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }

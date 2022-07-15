@@ -11,19 +11,24 @@ import {
 	isValidWord,
 	SolutionSetAfterGuess,
 } from "../utilities/stringUtils";
-import { allWordsList, allSolutionsList } from "../utilities/wordLists";
+import {allSolutionsList } from "../utilities/wordLists";
 import {
 	patternOfWordGivenSolution,
 	getEntropy,
 } from "../utilities/solverUtils";
 import WorkerBuilder from "../utilities/worker/worker-builder";
 import Worker from "../utilities/worker/guess-generate-worker";
-import { getSolutionFromOffset, getWordRowsFromStorage, getColorRowsFromStorage} from "../utilities/gameStateUtils";
+import {
+	getSolutionFromOffset,
+	getWordRowsFromStorage,
+	getColorRowsFromStorage,
+} from "../utilities/gameStateUtils";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import { useRef } from "react";
 import { condensedLayout } from "../assets/keyboardLayouts";
 import { checkboxes, getCheckboxStates } from "../assets/checkboxes";
+import Settings from "./Settings";
 
 /**
  * GRID COMPONENT START
@@ -38,11 +43,13 @@ function Grid(props) {
 	const keyboard = useRef();
 	const [currentActiveWordRow, setCurrentActiveWordRow] = useState(0);
 	const [currentActiveLetter, setCurrentActiveLetter] = useState(0);
-	const [wordRows, setWordRows] = useState(getWordRowsFromStorage() ||
-		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
+	const [wordRows, setWordRows] = useState(
+		getWordRowsFromStorage() ||
+			generateEmptyBoard(parseInt(props.width), parseInt(props.height))
 	);
-	const [colorRows, setColorRows] = useState(getColorRowsFromStorage() ||
-		generateEmptyBoard(parseInt(props.width), parseInt(props.height))
+	const [colorRows, setColorRows] = useState(
+		getColorRowsFromStorage() ||
+			generateEmptyBoard(parseInt(props.width), parseInt(props.height))
 	);
 	const [solved, setSolved] = useState(false);
 	const [solutionSet, setSolutionSet] = useState([...allSolutionsList]);
@@ -69,7 +76,7 @@ function Grid(props) {
 
 	// in the form [["crane", 5.43, 1.23], ["louts", 6.23, 0.34]...]
 	const [optimalGuesses, setOptimalGuesses] = useState([
-		["TRACE", 5.88, 0],
+		["TRACE", 5.85, 0],
 		["", 0, 0],
 		["", 0, 0],
 		["", 0, 0],
@@ -265,7 +272,7 @@ function Grid(props) {
 			shareText += "\n";
 		}
 		shareText += `Skill: ${
-			skillScores.reduce((a, b) => a + b) / skillScores.length
+			Math.round((skillScores.reduce((a, b) => a + b) / skillScores.length)*100)/100
 		}`;
 		if (navigator.share) {
 			navigator.share({ text: shareText }).catch((error) => {
@@ -276,15 +283,6 @@ function Grid(props) {
 			navigator.clipboard.writeText(shareText);
 		}
 	}
-
-	//handles changing of a checkbox, updates the local storage accordingly.
-	const handleCheckboxChange = (boxName) => {
-		const newCheckboxStates = { ...checkboxStates };
-		newCheckboxStates[boxName] = !newCheckboxStates[boxName];
-		setCheckboxStates(newCheckboxStates);
-		localStorage.setItem(boxName, newCheckboxStates[boxName]);
-		console.log(boxName);
-	};
 
 	/**
 	 *
@@ -394,7 +392,7 @@ function Grid(props) {
 			<div className="buttons">
 				{checkboxStates["Show Solver Assistant"] && (
 					<Button
-						className="my-5 justify-content-center btn-success"
+						className="justify-content-center btn-success"
 						onClick={handleNextGuessClicked}
 					>
 						Click on me to reveal the best next guess!
@@ -402,7 +400,7 @@ function Grid(props) {
 				)}
 				{props.type === "freeplay" && (
 					<Button
-						className="my-5 justify-content-center btn-danger"
+						className="ustify-content-center btn-danger"
 						onClick={() => window.location.reload()}
 					>
 						Give me a different Word!
@@ -426,20 +424,6 @@ function Grid(props) {
 					</div>
 				)}
 				{backgroundComputing && <p>Computing, please wait</p>}
-			</div>
-
-			<div className="options">
-				{checkboxes.map((elem) => (
-					<label key={elem}>
-						<input
-							type="checkbox"
-							checked={checkboxStates[elem]}
-							onChange={() => handleCheckboxChange(elem)}
-							key="elem"
-						/>
-						{elem}
-					</label>
-				))}
 			</div>
 
 			<div className="board">
