@@ -6,8 +6,9 @@
     left: 50%;
     transform: translate(-50%, 0); /* Center */
     background-color: rgba(10,10,10); /* Black background with opacity */
-    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 6; /* Specify a stack order in case you're using a different order for other elements */
     border-radius: 1rem;
+    animation: fadeIn 0.5s;
 
 }
 
@@ -24,3 +25,7 @@
     background-color: rgba(10,10,10,0.7);
     z-index: 1;
 }
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }

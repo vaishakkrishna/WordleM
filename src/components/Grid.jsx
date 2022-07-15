@@ -66,6 +66,9 @@ function Grid(props) {
 			: getSolutionFromOffset()
 	);
 
+	// Show banner upon completion
+	const [showSolved, setShowSolved] = useState(false);
+
 	//check if user uses all the guesses
 	const [guessesDepleted, setGuessesDepleted] = useState(false);
 
@@ -111,6 +114,10 @@ function Grid(props) {
 		const updateFunction = (colors) => {
 			if (colors === "ggggg") {
 				setSolved(true);
+				setShowSolved(true);
+				setTimeout(() => {
+					setShowSolved(false);
+				}, 3000);
 			}
 			newColorRows[currentActiveWordRow - 1] = colors.split("");
 			// Sets colors of prev. row
@@ -277,6 +284,10 @@ function Grid(props) {
 			});
 		} else {
 			setCopied(true);
+			setShowSolved(false);
+			setTimeout(() => {
+				setCopied(false);
+			}, 3000);
 			navigator.clipboard.writeText(shareText);
 		}
 	}
@@ -360,52 +371,42 @@ function Grid(props) {
 
 	return (
 		<div className="center">
-			{!guessesDepleted && !solved && (
-				<div className="center" style={{ fontSize: "x-small" }}>
-					(Scroll for more options)
-				</div>
-			)}
-
 			{guessesDepleted && (
 				<div className="completion-banner">
 					Nice Try :( Today's word was {solution.toUpperCase()}
 				</div>
 			)}
-			{solved && (
+			{solved && showSolved && (
 				<div className="completion-banner">
 					Well Done! Scroll down to share your results!
 				</div>
 			)}
 			{copied && <div className="completion-banner">Copied to clipboard!</div>}
 
-			<div className="grid-container">
-				<div className="grid">{rows}</div>
-			</div>
-
-			<div className="buttons">
+			<div className="button-container">
 				{props.settingsState["Show Solver Assistant"] && (
-					<Button
-						className="justify-content-center btn-success"
+					<button
+						className="button-default bg-primary"
 						onClick={handleNextGuessClicked}
 					>
-						Click on me to reveal the best next guess!
-					</Button>
+						Produce guess
+					</button>
 				)}
 				{props.type === "freeplay" && (
-					<Button
-						className="ustify-content-center btn-danger"
+					<button
+						className="button-default bg-danger"
 						onClick={() => window.location.reload()}
 					>
-						Give me a different Word!
-					</Button>
+						Different Word
+					</button>
 				)}
 				{solved && (
-					<Button
-						className="my-5 justify-content-center btn-primary"
+					<button
+						className="button-default bg-success"
 						onClick={handleShareClicked}
 					>
 						Share your grid!
-					</Button>
+					</button>
 				)}
 				{syncWithWordle && (
 					<div className="align-content-center">
@@ -417,6 +418,9 @@ function Grid(props) {
 					</div>
 				)}
 				{backgroundComputing && <p>Computing, please wait</p>}
+			</div>
+			<div className="grid-container">
+				<div className="grid">{rows}</div>
 			</div>
 
 			<div className="board">
