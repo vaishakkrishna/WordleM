@@ -22,9 +22,8 @@ function MyNavbar() {
 					<Nav.Link className="small-title" href="/freeplay">
 						FP
 					</Nav.Link>
-					<Nav.Link  href="/about">
-						About
-					</Nav.Link>
+					<Nav.Link href="/about">About</Nav.Link>
+
 				</Nav>
 			</Container>
 		</Navbar>

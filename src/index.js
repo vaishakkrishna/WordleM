@@ -18,6 +18,7 @@ export default function App() {
           <Route path="about" element={<Home/>} />
           <Route path="freeplay" element={<PlayView type="freeplay"/>} />
           <Route path="ScoreReport" element={<ScoreReport/>} />
+
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
