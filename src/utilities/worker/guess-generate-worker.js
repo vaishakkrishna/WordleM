@@ -82,7 +82,7 @@ function getPatternDistribution(word, solutionSet) {
     // loop through words in solution set, produce a pattern with the given word, and add to the distribution
     let patternDist = {};
     const individualProbability = 1/solutionSet.length;
-    for (i = 0; i < solutionSet.length; i++) {
+    for (let i = 0; i < solutionSet.length; i++) {
         var solution = solutionSet[i];
         let pattern = patternOfWordGivenSolution(word, solution);
         

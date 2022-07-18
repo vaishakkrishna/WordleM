@@ -29,6 +29,7 @@ import { useRef } from "react";
 import { condensedLayout } from "../assets/keyboardLayouts";
 import { checkboxes, getCheckboxStates } from "../assets/checkboxes";
 import Settings from "./Settings";
+import { getOffset } from "../utilities/gameStateUtils";
 
 /**
  * GRID COMPONENT START
@@ -263,8 +264,8 @@ function Grid(props) {
 
 	// Share button handler
 	function handleShareClicked(e) {
-		var shareText = "Wordle 001: " + currentActiveWordRow.toString() + "/6\n";
-		for (var i = 0; i < colorRows.length; i++) {
+		var shareText = `Better Wordle ${getOffset()}: ` + currentActiveWordRow.toString() + "/6\n";
+		for (var i = 0; i < currentActiveWordRow; i++) {
 			for (var j = 0; j < colorRows[i].length; j++) {
 				switch (colorRows[i][j]) {
 					case "g":

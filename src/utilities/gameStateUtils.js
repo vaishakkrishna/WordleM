@@ -1,10 +1,15 @@
 
 import { allSolutionsList } from "./wordLists";
-export function getSolutionFromOffset(){
+export function getOffset(){
     const doe = getDayOfTheYear();
     const offset = 195;
+    console.log(offset + doe)
+    return offset + doe;
+}
+export function getSolutionFromOffset(){
+    
 
-    const res = allSolutionsList[(offset + doe) % allSolutionsList.length];
+    const res = allSolutionsList[(getOffset()) % allSolutionsList.length];
 
     return res;
 }
