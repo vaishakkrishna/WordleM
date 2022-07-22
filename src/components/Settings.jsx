@@ -14,11 +14,11 @@ function Settings(props) {
 		props.updateSettingsState(newSettingsStates);
 		localStorage.setItem(settingName, newSettingsStates[settingName]);
 	};
-
+	
 	return (
 		<>
 			<div className="blurred-bg" />
-			<div className="settings-overlay center">
+			<div className="settings-overlay center" id="settings-page">
 				<h1 className="p-4">Settings</h1>
 				<div className="settings-list">
 					{settings.map((elem) => (

@@ -3,7 +3,6 @@ import { allSolutionsList } from "./wordLists";
 export function getOffset(){
     const doe = getDayOfTheYear();
     const offset = 195;
-    console.log(offset + doe)
     return offset + doe;
 }
 export function getSolutionFromOffset(){
