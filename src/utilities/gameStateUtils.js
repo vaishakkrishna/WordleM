@@ -48,7 +48,8 @@ export const getSettingsState = (settings) =>
 {
     let settingsState = {};
     settings.map(setting => {
-        return settingsState[setting] = localStorage.getItem(setting) === "true";
+        let item = localStorage.getItem(setting)
+        return settingsState[setting] = (item === "true" || item === "null");
     });
     return settingsState;
 }

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { getSettingsState } from "../utilities/gameStateUtils";
 import { settings } from "../assets/settings";
 import { useEffect } from "react";
+import settingsIcon from "../assets/settings.jpg";
 function PlayView(props) {
 	const [showSettings, setShowSettings] = useState(false);
 	const [settingsState, setSettingsState] = useState(
@@ -17,33 +18,28 @@ function PlayView(props) {
 		// function handlePageClick(e) {
 		// 	let settingsBox = document.getElementById("settings-page");
 		// 	console.log(settingsBox);
-
 		// 	if (
 		// 		!(
 		// 			e.pageX < settingsBox.right &&
 		// 			e.pageX > settingsBox.left &&
 		// 			e.pageY < settingsBox.bottom &&
 		// 			e.pageY > settingsBox.top
-		// 		) || 
+		// 		) ||
 		// 	) {
 		// 		setShowSettings(false);
 		// 	}
 		// }
-		document.addEventListener("click", handlePageClick);
+		// document.addEventListener("click", handlePageClick);
 	});
 	return (
 		<div className="page">
-			<Button
-				className="settings-icon btn-secondary"
-				onClick={(e) => setShowSettings(!showSettings)}
-			>
-				⚙
-			</Button>
+			<div onClick={(e) => setShowSettings(!showSettings)}>
+				<img src={settingsIcon} alt="⚙" className="settings-icon" />
+			</div>
 			{showSettings && (
 				<Settings
 					settingsState={settingsState}
 					updateSettingsState={setSettingsState}
-					
 				/>
 			)}
 			<Grid
