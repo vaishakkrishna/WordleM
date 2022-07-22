@@ -14,21 +14,21 @@ function PlayView(props) {
 	);
 
 	useEffect(() => {
-		function handlePageClick(e) {
-			let settingsBox = document.getElementById("settings-page");
-			console.log(settingsBox);
+		// function handlePageClick(e) {
+		// 	let settingsBox = document.getElementById("settings-page");
+		// 	console.log(settingsBox);
 
-			if (
-				!(
-					e.pageX < settingsBox.right &&
-					e.pageX > settingsBox.left &&
-					e.pageY < settingsBox.bottom &&
-					e.pageY > settingsBox.top
-				)
-			) {
-				setShowSettings(false);
-			}
-		}
+		// 	if (
+		// 		!(
+		// 			e.pageX < settingsBox.right &&
+		// 			e.pageX > settingsBox.left &&
+		// 			e.pageY < settingsBox.bottom &&
+		// 			e.pageY > settingsBox.top
+		// 		) || 
+		// 	) {
+		// 		setShowSettings(false);
+		// 	}
+		// }
 		document.addEventListener("click", handlePageClick);
 	});
 	return (
