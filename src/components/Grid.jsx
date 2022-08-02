@@ -398,7 +398,7 @@ function Grid(props) {
 						className="button-default bg-primary"
 						onClick={handleNextGuessClicked}
 					>
-						Produce guess
+						Fill in next best guess!
 					</button>
 				)}
 				{props.type === "freeplay" && (
