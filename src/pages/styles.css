@@ -43,3 +43,8 @@
   .title { display: none; }
 }
 
+body {
+  background-color: #111111;
+  margin: 0;
+  overflow-x: hidden;
+}

@@ -8,7 +8,7 @@ import "./styles.css";
 const Layout = () => {
 	return (
 		<div>
-			<MyNavbar />
+			<MyNavbar/>
 
 			<Outlet />
 		</div>
